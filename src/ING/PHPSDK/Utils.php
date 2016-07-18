@@ -1,14 +1,34 @@
 <?php
+/**
+ * ING/PHPSDK/Utils.php
+ *
+ * @author REDspace <https://redspace.com>
+ * @author Jeff Hann <jeff.hann@redspace.com>
+ * @copyright 2016 REDspace
+ * @package ING\PHPSDK
+ * @filesource
+ */
 
 namespace ING\PHPSDK;
 
-class Utils
-{
-    private function parseTokenPayload($token)
-    {
+/**
+ * Utility functions for dealing with the Ingest API.
+ *
+ * @package ING\PHPSDK
+ */
+class Utils {
+    /**
+     * parseTokenPayload
+     *
+     * Accept a JWT and return the payload.
+     *
+     * @param $token
+     * @return bool|mixed
+     */
+    private function parseTokenPayload($token) {
         $parts = explode('.', $token);
 
-        if (sizeof($parts) <= 1) {
+        if (1 >= sizeof($parts)) {
             return false;
         }
 
@@ -17,16 +37,23 @@ class Utils
         return json_decode($payload);
     }
 
+    /**
+     * isExpired
+     *
+     * Accept a JWT and compare the `exp` to a current unix date stamp, returning true if
+     * the token has expired.
+     *
+     * @param $token
+     * @return bool
+     */
     public function isExpired($token) {
         $data = $this->parseTokenPayload($token);
 
-        if ($data == false)
-        {
+        if (false == $data) {
             return true;
         }
 
-        if (property_exists($data, 'exp') == false)
-        {
+        if (false == property_exists($data, 'exp'))  {
             return false;
         }
 
@@ -40,12 +67,21 @@ class Utils
         return true;
     }
 
-    public function parseTokens($template, $hash)
-    {
+    /**
+     * parseTokens
+     *
+     * Accepts a template in the form of a string and an object containing
+     * keys and matching values to replace within the template. Returns the completed
+     * template.
+     *
+     * @param $template
+     * @param $hash
+     * @return mixed
+     */
+    public function parseTokens($template, $hash) {
         $keys = get_object_vars($hash);
 
-        foreach ($keys as $key => $val) 
-        {
+        foreach ($keys as $key => $val) {
             $template = str_replace($template, '<%=' . $key . '%>', $val);
         }
 
