@@ -2,6 +2,7 @@
 
 namespace ING\PHPSDK;
 
+use ING\PHPSDK\UTILS\Utils;
 use PHPUnit\Framework\TestCase;
 
 class UtilsTest extends TestCase {

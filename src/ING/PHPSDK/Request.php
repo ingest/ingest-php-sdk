@@ -123,8 +123,9 @@ class Request extends Base {
      *
      * @param $opt The CURLOPT_XXX option to set.
      * @param $val The value to be set on option.
-     * @throws Exception
+     * @throws \Exception
      */
+
     private function setOpt($opt, $val) {
         if (false == curl_setopt($this->ch, $opt, $val)) {
             throw new \Exception(sprintf('%s (%s => %s', Request::ERROR_SETOPT, $opt, $val));
@@ -136,7 +137,7 @@ class Request extends Base {
      *
      * @uses Request::$validResponseCodes to validate response code from server.
      * @param $responseCode HTTP response code provided by Curl request.
-     * @throws Exception
+     * @throws \Exception
      */
     private function validateResponseCode($responseCode) {
         if (false === in_array($responseCode, Request::$validResponseCodes)) {
