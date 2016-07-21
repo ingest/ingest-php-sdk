@@ -1,20 +1,20 @@
 <?php
 /**
- * ING/PHPSDK/Utils.php
+ * ING/PHPSDK/\TOOLS\Utils.php
  *
  * @author REDspace <https://redspace.com>
  * @author Jeff Hann <jeff.hann@redspace.com>
  * @copyright 2016 REDspace
- * @package ING\PHPSDK
+ * @package ING\PHPSDK\TOOLS
  * @filesource
  */
 
-namespace ING\PHPSDK;
+namespace ING\PHPSDK\UTILS;
 
 /**
  * Utility functions for dealing with the Ingest API.
  *
- * @package ING\PHPSDK
+ * @package ING\PHPSDK\TOOLS
  */
 class Utils {
     /**
