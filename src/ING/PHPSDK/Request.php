@@ -1,6 +1,6 @@
 <?php
 /**
- * ING/PHPSDK/Requests.php
+ * ING/PHPSDK/Request.php
  *
  * @author REDspace <https://redspace.com>
  * @author Jeff Hann <jeff.hann@redspace.com>
@@ -13,8 +13,6 @@ namespace ING\PHPSDK;
 
 use ING\Base;
 
-require dirname(__DIR__) . '/Base.php';
-
 /**
  * Request class for handling all transactions to and from the API.
  *
@@ -25,7 +23,7 @@ class Request extends Base {
      * List of valid HTTP response codes
      *
      * @var array
-     * @const
+     * @const int
      */
     private static $validResponseCodes = Array(200, 201, 202, 204);
 
@@ -53,6 +51,7 @@ class Request extends Base {
 
     /**
      * Request constructor.
+     *
      * @param \ING\stdClass|NULL|\stdClass $config
      * @throws \Exception
      */
@@ -75,7 +74,7 @@ class Request extends Base {
     }
 
     /**
-     * Request deconstructor closes curl connection
+     * Request deconstruct closes curl connection
      */
     public function __destruct()
     {
@@ -88,12 +87,13 @@ class Request extends Base {
      * Execute curl request
      *
      * @return mixed|string
+     * @throws \Exception
      */
     public function send() {
         $response = curl_exec($this->ch);
 
         if (false === $response) {
-            return curl_error($this->ch);
+            throw new \Exception(curl_error($this->ch));
         }
 
         $this->validateResponseCode(curl_getinfo($this->ch, CURLINFO_RESPONSE_CODE));
@@ -121,9 +121,9 @@ class Request extends Base {
     /**
      * Update a curl option
      *
-     * @param $opt The CURLOPT_XXX option to set.
-     * @param $val The value to be set on option.
-     * @throws Exception
+     * @param $opt string The CURLOPT_XXX option to set.
+     * @param $val string The value to be set on option.
+     * @throws \Exception
      */
     private function setOpt($opt, $val) {
         if (false == curl_setopt($this->ch, $opt, $val)) {
@@ -135,8 +135,8 @@ class Request extends Base {
      * Accepts a HTTP response code and if it is not an accepted code throws an error.
      *
      * @uses Request::$validResponseCodes to validate response code from server.
-     * @param $responseCode HTTP response code provided by Curl request.
-     * @throws Exception
+     * @param int $responseCode HTTP response code provided by Curl request.
+     * @throws \Exception
      */
     private function validateResponseCode($responseCode) {
         if (false === in_array($responseCode, Request::$validResponseCodes)) {
