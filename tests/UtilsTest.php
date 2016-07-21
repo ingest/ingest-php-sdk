@@ -12,7 +12,7 @@
 namespace ING\PHPSDK\TESTS;
 
 use PHPUnit\Framework\TestCase;
-use ING\PHPSDK\Utils;
+use ING\PHPSDK\UTILS\Utils;
 
 /**
  * Class UtilsTest

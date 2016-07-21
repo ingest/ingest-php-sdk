@@ -125,6 +125,7 @@ class Request extends Base {
      * @param $val string The value to be set on option.
      * @throws \Exception
      */
+
     private function setOpt($opt, $val) {
         if (false == curl_setopt($this->ch, $opt, $val)) {
             throw new \Exception(sprintf('%s (%s => %s', Request::ERROR_SETOPT, $opt, $val));
