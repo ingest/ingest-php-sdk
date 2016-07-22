@@ -23,7 +23,7 @@ abstract class Base {
      *
      * Accepts an object of properties.
      *
-     * @param stdClass|NULL $config
+     * @param \stdClass|NULL $config
      */
     public function __construct(\stdClass $config = NULL) {
         if (false == is_null($config)) {

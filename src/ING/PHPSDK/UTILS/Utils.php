@@ -25,7 +25,7 @@ class Utils {
      * @param $token
      * @return bool|mixed
      */
-    private function parseTokenPayload($token) {
+    static private function parseTokenPayload($token) {
         $parts = explode('.', $token);
 
         if (1 >= sizeof($parts)) {
@@ -46,8 +46,8 @@ class Utils {
      * @param $token
      * @return bool
      */
-    public function isExpired($token) {
-        $data = $this->parseTokenPayload($token);
+    static public function isExpired($token) {
+        $data = Utils::parseTokenPayload($token);
 
         if (false == $data) {
             return true;
@@ -78,11 +78,9 @@ class Utils {
      * @param $hash
      * @return mixed
      */
-    public function parseTokens($template, $hash) {
-        $keys = get_object_vars($hash);
-
-        foreach ($keys as $key => $val) {
-            $template = str_replace($template, '<%=' . $key . '%>', $val);
+    static public function parseTokens($template, $hash) {
+        foreach ($hash as $key => $val) {
+            $template = str_replace('<%=' . $key . '%>', $val, $template);
         }
 
         return $template;

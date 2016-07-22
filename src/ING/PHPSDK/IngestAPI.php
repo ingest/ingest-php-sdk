@@ -13,8 +13,8 @@
 namespace ING\PHPSDK;
 
 use ING\Base;
-
-require dirname(__DIR__) . '/Base.php';
+use ING\PHPSDK\RESOURCES\Users;
+use ING\PHPSDK\RESOURCES\Videos;
 
 /**
  * Class IngestAPI
@@ -81,7 +81,7 @@ class IngestAPI extends Base {
      * JWT object.
      * @var object
      */
-    private $token = NULL;
+    protected $token = NULL;
 
     /**
      * setToken
@@ -103,5 +103,36 @@ class IngestAPI extends Base {
      */
     public function getToken() {
         return $this->token;
+    }
+
+    private function setOpts($class) {
+        $opts = $class::getDefaults();
+        $opts->token = $this->getToken();
+        $opts->host = $this->host;
+        return $opts;
+    }
+
+    /**
+     * @var Videos
+     */
+
+    public $videos;
+
+    /**
+     * @var Users
+     */
+    public $users;
+
+    /**
+     * IngestAPI constructor.
+     *
+     * @param NULL|\stdClass $config
+     */
+    public function __construct($config)
+    {
+        // create users object
+        parent::__construct($config);
+        $this->users = new Users($this->setOpts(Users::class));
+        $this->videos = new Users($this->setOpts(Videos::class));
     }
 }

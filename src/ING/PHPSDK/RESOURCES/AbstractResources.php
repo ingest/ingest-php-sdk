@@ -11,13 +11,15 @@
 
 namespace ING\PHPSDK\RESOURCES;
 use ING\Base;
+use ING\PHPSDK\Request;
+use ING\PHPSDK\UTILS\Utils;
 
 /**
- * Class Resources
+ * Class AbstractResources
  *
  * @package ING\PHPSDK\RESOURCES
  */
-class Resources extends Base
+Abstract class AbstractResources extends Base
 {
     /**
      * @var string
@@ -54,29 +56,61 @@ class Resources extends Base
     /**
      * @var null
      */
-    private $tokenSource = null;
+    protected $token = null;
 
     /**
      * @var null
      */
-    private $resource = null;
+    protected $resource = null;
+
+    /**
+     * @var object
+     */
+    public $users;
+
+    private function buildRequest($opts) {
+        $options = Request::getDefaults();
+        $options->token = $this->token;
+
+        foreach ($opts as $key => $val) {
+           $options->$key = $val;
+        }
+
+        return new Request($options);
+    }
 
     /**
      * Return a list of the requested resource for the current user and network.
      *
      * @param $headers
+     * @return mixed|string
      */
-    public function getAll($headers) {
+    public function getAll($headers = null) {
+        $opts = array(
+            'url' => Utils::parseTokens($this->host . $this->all, array('resource' => $this->resource)),
+        );
 
+        $req = $this->buildRequest($opts);
+        return $req->send();
     }
 
     /**
      * Return a resource that matches the supplied id.
      *
      * @param $id
+     * @return mixed|string
      */
     public function getById($id) {
+        $keys = array(
+            'resource' => $this->resource,
+            'id' => $id
+        );
+        $opts = array (
+           'url' => Utils::parseTokens($this->host . $this->byId, $keys),
+        );
 
+        $req = $this->buildRequest($opts);
+        return $req->send();
     }
 
     /**

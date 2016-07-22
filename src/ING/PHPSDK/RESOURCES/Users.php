@@ -11,16 +11,14 @@
 
 namespace ING\PHPSDK\RESOURCES;
 
-use ING\Base;
-
-require dirname(__DIR__) . '/Request.php';
+use ING\PHPSDK\Request;
 
 /**
  * Class Users
  *
  * @package ING\PHPSDK\RESOURCES
  */
-class Users extends Base {
+class Users extends AbstractResources {
     /**
      * Current user URL template.
      *
@@ -42,11 +40,17 @@ class Users extends Base {
      */
     protected $revoke = '/revoke';
 
+    protected $resource = 'users';
+
     /**
      * Retrieve information for the current user.
      */
     public function getCurrentUserInfo() {
+        $options = Request::getDefaults();
+        $options->url = $this->host . $this->currentUser;
+        $request = new Request($options);
 
+        return $request->send();
     }
 
     /**
@@ -65,8 +69,3 @@ class Users extends Base {
 
     }
 }
-
-$z = Users::getDefaults();
-$z->revoke = 'abcd';
-$a = new Users($z);
-var_dump($a);

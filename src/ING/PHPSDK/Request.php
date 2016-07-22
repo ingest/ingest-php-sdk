@@ -12,6 +12,7 @@
 namespace ING\PHPSDK;
 
 use ING\Base;
+use ING\PHPSDK\UTILS\Utils;
 
 /**
  * Request class for handling all transactions to and from the API.
@@ -70,6 +71,16 @@ class Request extends Base {
         if ('POST' == $this->method) {
             $this->setOpt(CURLOPT_POST, true);
             $this->preparePostData($this->postData);
+        }
+
+        // Validate token is not expired
+        if (isset($this->token)) {
+            $utils = new Utils();
+            $utils->isExpired($this->token);
+            $this->setOpt(CURLOPT_HTTPHEADER, array(
+                'Authorization: Bearer ' . $this->token,
+                'Accept: application/vnd.ingest.v1+json'
+            ));
         }
     }
 

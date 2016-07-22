@@ -11,16 +11,12 @@
 
 namespace ING\PHPSDK\RESOURCES;
 
-use ING\Base;
-
-require dirname(__DIR__) . '/Base.php';
-
 /**
  * Class Videos
  *
  * @package ING\PHPSDK\RESOURCES
  */
-class Videos extends Base {
+class Videos extends AbstractResources {
     /**
      * @var string
      */
@@ -40,6 +36,11 @@ class Videos extends Base {
      * @var string
      */
     protected $missingVariants = '/<%=resource%>?filter=missing_variants';
+
+    /**
+     * @var string
+     */
+    protected $resource = 'videos';
 
     /**
      * Return any playlists that contains the provided video.
