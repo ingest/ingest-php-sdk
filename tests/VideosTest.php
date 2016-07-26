@@ -40,5 +40,4 @@ class VideosTest extends Base {
         $videos = $api->videos;
         $videos->count();
     }
-
 }

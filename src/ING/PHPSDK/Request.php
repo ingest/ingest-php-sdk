@@ -14,6 +14,16 @@ namespace ING\PHPSDK;
 use ING\Base;
 use ING\PHPSDK\UTILS\Utils;
 
+class RequestResponse {
+    public $header = '';
+    public $body = '';
+
+    public function __construct($header, $body) {
+        $this->header = $header;
+        $this->body = $body;
+    }
+}
+
 /**
  * Request class for handling all transactions to and from the API.
  *
@@ -67,16 +77,21 @@ class Request extends Base {
         }
 
         $this->setOpt(CURLOPT_RETURNTRANSFER, true);
+        $this->setOpt(CURLOPT_HEADER, true);
 
+        // If the method is POST prepare the data and set the options, if it is any other
+        // method (exccept GET) specificy the custom request type
         if ('POST' == $this->method) {
-            $this->setOpt(CURLOPT_POST, true);
+                $this->setOpt(CURLOPT_POST, true);
             $this->preparePostData($this->postData);
+            $this->setOpt(CURLOPT_POSTFIELDS, $this->postData);
+        } else if ('GET' != $this->method) {
+            $this->setOpt(CURLOPT_CUSTOMREQUEST, $this->method);
         }
 
-        // Validate token is not expired
+        // Validate token is not expired and set headers
         if (isset($this->token)) {
-            $utils = new Utils();
-            $utils->isExpired($this->token);
+            Utils::isExpired($this->token);
             $this->setOpt(CURLOPT_HTTPHEADER, array(
                 'Authorization: Bearer ' . $this->token,
                 'Accept: application/vnd.ingest.v1+json'
@@ -97,7 +112,7 @@ class Request extends Base {
     /**
      * Execute curl request
      *
-     * @return mixed|string
+     * @return RequestResponse
      * @throws \Exception
      */
     public function send() {
@@ -109,7 +124,22 @@ class Request extends Base {
 
         $this->validateResponseCode(curl_getinfo($this->ch, CURLINFO_RESPONSE_CODE));
 
-        return $response;
+        $headerSize = curl_getinfo($this->ch, CURLINFO_HEADER_SIZE);
+        $headerText = substr($response, 0, $headerSize);
+        $headers = array();
+
+        print_r($headerText);
+
+        foreach (explode('\n', $headerText) as $i => $line) {
+            if (0 === $i) {
+                $headers['http_code'] = $line;
+            } else {
+                list($key, $val) = explode(':', $line);
+                $headers[$key] = $val;
+            }
+        }
+
+        return new RequestResponse($headers, $response);
     }
 
     /**

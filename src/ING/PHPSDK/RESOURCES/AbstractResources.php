@@ -10,6 +10,7 @@
  */
 
 namespace ING\PHPSDK\RESOURCES;
+
 use ING\Base;
 use ING\PHPSDK\Request;
 use ING\PHPSDK\UTILS\Utils;
@@ -68,17 +69,6 @@ Abstract class AbstractResources extends Base
      */
     public $users;
 
-    private function buildRequest($opts) {
-        $options = Request::getDefaults();
-        $options->token = $this->token;
-
-        foreach ($opts as $key => $val) {
-           $options->$key = $val;
-        }
-
-        return new Request($options);
-    }
-
     /**
      * Return a list of the requested resource for the current user and network.
      *
@@ -87,11 +77,11 @@ Abstract class AbstractResources extends Base
      */
     public function getAll($headers = null) {
         $opts = array(
-            'url' => Utils::parseTokens($this->host . $this->all, array('resource' => $this->resource)),
+            'url' => $this->assembleURL($this->all),
         );
 
         $req = $this->buildRequest($opts);
-        return $req->send();
+        return $req->send()->body;
     }
 
     /**
@@ -101,16 +91,12 @@ Abstract class AbstractResources extends Base
      * @return mixed|string
      */
     public function getById($id) {
-        $keys = array(
-            'resource' => $this->resource,
-            'id' => $id
-        );
         $opts = array (
-           'url' => Utils::parseTokens($this->host . $this->byId, $keys),
+           'url' => $this->assembleURL($this->byId, array('id' => $id)),
         );
 
         $req = $this->buildRequest($opts);
-        return $req->send();
+        return $req->send()->body;
     }
 
     /**
@@ -118,8 +104,13 @@ Abstract class AbstractResources extends Base
      *
      * @param $headers
      */
-    public function getTrashed($headers) {
+    public function getTrashed($headers = null) {
+        $opts = array(
+            'url' => $this->assembleURL($this->trash)
+        );
 
+        $req = $this->buildRequest($opts);
+        return $req->send()->body;
     }
 
     /**
@@ -185,7 +176,13 @@ Abstract class AbstractResources extends Base
      * @return int
      */
     public function count() {
+        $opts = array(
+            'url' => $this->assembleURL($this->all),
+            'method' => 'HEAD'
+        );
 
+        $req = $this->buildRequest($opts);
+        return $req->send()->header;
     }
 
     /**
@@ -194,6 +191,41 @@ Abstract class AbstractResources extends Base
      * @return int
      */
     public function trashCount() {
+        $opts = array(
+            'url' => $this->assembleURL($this->trash),
+            'method' => 'HEAD'
+        );
 
+        $req = $this->buildRequest($opts);
+        return $req->send()->header;
+    }
+
+    /**
+     * Assemble a full URL based on the host and a array of keys
+     *
+     * @param string $route
+     * @param array $keys
+     * @return string
+     */
+    protected function assembleURL(string $route, array $keys = array()) {
+        $keys['resource'] = $this->resource;
+        return Utils::parseTokens($this->host . $route, $keys);
+    }
+
+    /**
+     * Build a new Request object based on the provided options
+     * @param array $opts
+     * @return Request
+     */
+    private function buildRequest(array $opts) {
+
+        $options = Request::getDefaults();
+        $options->token = $this->token;
+
+        foreach ($opts as $key => $val) {
+            $options->$key = $val;
+        }
+
+        return new Request($options);
     }
 }

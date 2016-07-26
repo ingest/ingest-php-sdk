@@ -26,6 +26,35 @@ class UsersTest extends Base {
     }
 
     /**
+     * @covers Vidoes::getById()
+     */
+    public function testGetById() {
+        $api = VideosTest::API();
+        $users = $api->users;
+        $users->getById('c33a7fb6-1246-4634-9c02-a29149ee3954');
+    }
+
+    public function testGetTrashed() {
+        $api = UsersTest::API();
+        $users = $api->users;
+        $users->getTrashed();
+    }
+
+    /**
+    * @covers Users::count()
+    */
+    public function testCount() {
+        $api = UsersTest::API();
+        $users = $api->users;
+        $users->count();
+    }
+
+    public function testTrashCount() {
+        $api = UsersTest::API();
+        $users = $api->users;
+        $users->trashCount();
+    }
+    /**
      * @covers Users::currentUserInfo()
      */
 //    public function testCurrentUserInfo() {
