@@ -26,14 +26,17 @@ class UsersTest extends Base {
     }
 
     /**
-     * @covers Vidoes::getById()
+     * @covers Vidoes::getById
      */
     public function testGetById() {
-        $api = VideosTest::API();
+        $api = UsersTest::API();
         $users = $api->users;
         $users->getById('c33a7fb6-1246-4634-9c02-a29149ee3954');
     }
 
+    /**
+    * @covers Users:getTrashed
+    */
     public function testGetTrashed() {
         $api = UsersTest::API();
         $users = $api->users;
@@ -41,7 +44,7 @@ class UsersTest extends Base {
     }
 
     /**
-    * @covers Users::count()
+    * @covers Users::count
     */
     public function testCount() {
         $api = UsersTest::API();
@@ -49,6 +52,9 @@ class UsersTest extends Base {
         $users->count();
     }
 
+    /**
+    * @covers Users::trashCount
+    */
     public function testTrashCount() {
         $api = UsersTest::API();
         $users = $api->users;
