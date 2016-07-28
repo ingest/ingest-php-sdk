@@ -14,7 +14,8 @@ use ING\PHPSDK\IngestAPI;
 /**
  * Base class for all tests to extend.
  */
-class Base extends TestCase {
+class Base extends TestCase
+{
     /**
      * Host to local REST server.
      * @var string
