@@ -14,11 +14,13 @@ namespace ING\PHPSDK;
 use ING\Base;
 use ING\PHPSDK\UTILS\Utils;
 
-class RequestResponse {
+class RequestResponse
+{
     public $header = '';
     public $body = '';
 
-    public function __construct($header, $body) {
+    public function __construct($header, $body)
+    {
         $this->header = $header;
         $this->body = $body;
     }
@@ -29,14 +31,15 @@ class RequestResponse {
  *
  * @package ING\PHPSDK
  */
-class Request extends Base {
+class Request extends Base
+{
     /**
      * List of valid HTTP response codes
      *
      * @var array
      * @const int
      */
-    private static $validResponseCodes = Array(200, 201, 202, 204);
+    private static $validResponseCodes = array(200, 201, 202, 204);
 
     const TYPE_JSON = 'JSON';
     const ERROR_URL = 'Request Error : a url is required to make the request.';
@@ -82,10 +85,10 @@ class Request extends Base {
         // If the method is POST prepare the data and set the options, if it is any other
         // method (exccept GET) specificy the custom request type
         if ('POST' == $this->method) {
-                $this->setOpt(CURLOPT_POST, true);
+            $this->setOpt(CURLOPT_POST, true);
             $this->preparePostData($this->postData);
             $this->setOpt(CURLOPT_POSTFIELDS, $this->postData);
-        } else if ('GET' != $this->method) {
+        } elseif ('GET' != $this->method) {
             $this->setOpt(CURLOPT_CUSTOMREQUEST, $this->method);
         }
 
@@ -115,7 +118,8 @@ class Request extends Base {
      * @return RequestResponse
      * @throws \Exception
      */
-    public function send() {
+    public function send()
+    {
         $response = curl_exec($this->ch);
 
         if (false === $response) {
@@ -148,7 +152,8 @@ class Request extends Base {
      * @param \stdClass|null $postData
      * @throws \Exception
      */
-    private function preparePostData(\stdClass &$postData = null) {
+    private function preparePostData(\stdClass &$postData = null)
+    {
         if (false == isset($postData)) {
             throw new \Exception(Request::ERROR_POSTDATA);
         }
@@ -167,7 +172,8 @@ class Request extends Base {
      * @throws \Exception
      */
 
-    private function setOpt($opt, $val) {
+    private function setOpt($opt, $val)
+    {
         if (false == curl_setopt($this->ch, $opt, $val)) {
             throw new \Exception(sprintf('%s (%s => %s', Request::ERROR_SETOPT, $opt, $val));
         }
@@ -180,7 +186,8 @@ class Request extends Base {
      * @param int $responseCode HTTP response code provided by Curl request.
      * @throws \Exception
      */
-    private function validateResponseCode($responseCode) {
+    private function validateResponseCode($responseCode)
+    {
         if (false === in_array($responseCode, Request::$validResponseCodes)) {
             throw new \Exception(sprintf('%s (%d)', Request::ERROR_RESCODE, $responseCode));
         }
