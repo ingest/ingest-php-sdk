@@ -26,7 +26,8 @@ class RequestTest extends TestCase
      * @covers Request::send
      * @expectedException Exception
      */
-    public function testInvalidURL() {
+    public function testInvalidURL()
+    {
         $config = Request::getDefaults();
         $config->url = 'http://fakefakefake.com/';
         $req = new Request($config);
@@ -39,7 +40,8 @@ class RequestTest extends TestCase
      * @covers Request::validateResponseCode
      * @expectedException Exception
      */
-    public function testInvalidResponseCode() {
+    public function testInvalidResponseCode()
+    {
         $config = Request::getDefaults();
         $config->url = 'https://ingest.io/idontexist.html';
         $req = new Request($config);
@@ -51,10 +53,11 @@ class RequestTest extends TestCase
      *
      * @covers Request::send
      */
-    public function testGetPage() {
+    public function testGetPage()
+    {
         $config = Request::getDefaults();
         $config->url = 'http://example.com/';
         $req = new Request($config);
-        $req->send();
+        $this->assertNotNull($req->send());
     }
 }
