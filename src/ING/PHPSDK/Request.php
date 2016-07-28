@@ -127,23 +127,39 @@ class Request extends Base
         }
 
         $this->validateResponseCode(curl_getinfo($this->ch, CURLINFO_RESPONSE_CODE));
-
-        $headerSize = curl_getinfo($this->ch, CURLINFO_HEADER_SIZE);
-        $headerText = substr($response, 0, $headerSize);
+        list($headerText, $content) = explode("\r\n\r\n", $response, 2);
         $headers = array();
 
-        print_r($headerText);
+        var_dump($headerText);
 
-        foreach (explode('\n', $headerText) as $i => $line) {
-            if (0 === $i) {
-                $headers['http_code'] = $line;
-            } else {
-                list($key, $val) = explode(':', $line);
-                $headers[$key] = $val;
-            }
-        }
+        // foreach ($headerText as $key => $r) {
+        //     var_dump($key);
+        // }
 
-        return new RequestResponse($headers, $response);
+        // $headerData = explode('\r\n', $headerText);
+
+        // var_dump($headerData);
+
+        // var_dump($headers);
+
+        // array_shift($headerData);
+
+
+        // for ($n = 0; $n <= count($headerRows) - 1; $n++) {
+        //     $headerLine = explode('\n', $headerRows[$n]);
+        //     var_dump($headerLine);
+        // }
+
+        // foreach (explode('\n', $headerText) as $i => $line) {
+        //     if (0 === $i) {
+        //         $headers['http_code'] = $line;
+        //     } else {
+        //         list($key, $val) = explode(':', $line);
+        //         $headers[$key] = $val;
+        //     }
+        // }
+
+        return new RequestResponse($headers, $content);
     }
 
     /**

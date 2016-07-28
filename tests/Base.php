@@ -45,6 +45,7 @@ class Base extends TestCase
     public static function API()
     {
         $options = IngestAPI::getDefaults();
+
         $options->host = Base::HOST;
         $options->token = Base::TOKEN;
 

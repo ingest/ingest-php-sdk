@@ -13,31 +13,59 @@ require_once 'Base.php';
 /**
  * Class VideosTest
  */
-class VideosTest extends Base {
+class VideosTest extends Base
+{
     /**
      * @covers Videos::getAll()
      */
-    public function testGetAll() {
+    public function testGetAll()
+    {
         $api = VideosTest::API();
         $videos = $api->videos;
-        $videos->getAll();
+        $this->assertNotNull($videos->getAll());
     }
 
     /**
      * @covers Vidoes::getById()
      */
-    public function testGetById() {
+    public function testGetById()
+    {
         $api = VideosTest::API();
         $videos = $api->videos;
-        $videos->getById('f0ca2824-efa1-4117-9052-32ff9e173cf5');
+        $this->assertNotNull($videos->getById('f0ca2824-efa1-4117-9052-32ff9e173cf5'));
     }
 
+    // /**
+    //  * @covers Vidoes::count()
+    //  */
+    // public function testCount()
+    // {
+    //     $api = VideosTest::API();
+    //     $videos = $api->videos;
+    //     $count = $videos->count;
+    //     $this->assertInternalType("int", $count);
+    //     $this->assertGreaterThanOrEqual(0, $count);
+    // }
+
     /**
-     * @covers Vidoes::count()
-     */
-    public function testCount() {
+    * @covers Videos:getTrashed
+    */
+    public function testGetTrashed()
+    {
         $api = VideosTest::API();
         $videos = $api->videos;
-        $videos->count();
+        $this->assertNotNull($videos->getTrashed());
     }
+
+    // /**
+    // * @covers Videos::trashCount
+    // */
+    // public function testTrashCount()
+    // {
+    //     $api = VideosTest::API();
+    //     $videos = $api->videos;
+    //     $count = $videos->trashCount();
+    //     $this->assertInternalType("int", $count);
+    //     $this->assertGreaterThanOrEqual(0, $count);
+    // }
 }
