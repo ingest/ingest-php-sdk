@@ -8,14 +8,17 @@
     {
       "name": "Jeff Hann",
       "homepage": "https://redspace.com",
-      "role": "Developer",
+      "role": "Developer"
     }
   ],
   "require": {
     "php": "^5.4 || ^7.0"
   },
-   "require-dev": {
-        "phpunit/phpunit": "5.4.6",
-        "phpdocumentor/phpdocumentor": "2.*"
-    }
+  "require-dev": {
+    "phpunit/phpunit-story": "^1.0",
+    "phpunit/phpunit": "5.4.6",
+    "phpdocumentor/phpdocumentor": "2.*",
+    "phpunit/DbUnit": "^2.0",
+    "phpunit/php-invoker": "^1.1"
+  }
 }

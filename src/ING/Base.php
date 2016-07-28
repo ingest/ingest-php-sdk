@@ -17,7 +17,8 @@ namespace ING;
  *
  * @package ING
  */
-abstract class Base {
+abstract class Base
+{
     /**
      * Request constructor.
      *
@@ -25,7 +26,8 @@ abstract class Base {
      *
      * @param \stdClass|NULL $config
      */
-    public function __construct(\stdClass $config = NULL) {
+    public function __construct(\stdClass $config = null)
+    {
         if (false == is_null($config)) {
             foreach ($config as $key => $value) {
                 $this->$key = $value;
@@ -38,14 +40,15 @@ abstract class Base {
      *
      * @return object An object containing the default properties of the class.
      */
-    public static function getDefaults() {
+    public static function getDefaults()
+    {
         $reflection = new \ReflectionClass(get_called_class());
         $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED);
         $defaults = $reflection->getDefaultProperties();
 
         $config = new \StdClass;
 
-        foreach($properties as $property) {
+        foreach ($properties as $property) {
             $name = $property->name;
             $config->$name = $defaults[$name];
         }

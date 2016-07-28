@@ -18,7 +18,8 @@ use ING\PHPSDK\Request;
  *
  * @package ING\PHPSDK\RESOURCES
  */
-class Users extends AbstractResources {
+class Users extends AbstractResources
+{
     /**
      * Current user URL template.
      *
@@ -45,12 +46,15 @@ class Users extends AbstractResources {
     /**
      * Retrieve information for the current user.
      */
-    public function getCurrentUserInfo() {
-        $options = Request::getDefaults();
-        $options->url = $this->host . $this->currentUser;
-        $request = new Request($options);
+    public function getCurrentUserInfo()
+    {
+        $opts = array(
+            'url' => $this->assembleURL($this->currentUser)
+        );
 
-        return $request->send();
+        $req = $this->buildRequest($opts);
+
+        return $req->send()->body;
     }
 
     /**
@@ -58,14 +62,14 @@ class Users extends AbstractResources {
      * This includes all videos & playlists.
      * This task is commonly used in conjunction with permanently deleting a user.
      */
-    public function transferUserAuthorship() {
-
+    public function transferUserAuthorship()
+    {
     }
 
     /**
      * Revokes the authorization token for the current user.
      */
-    public function revokeCurrentUser() {
-
+    public function revokeCurrentUser()
+    {
     }
 }

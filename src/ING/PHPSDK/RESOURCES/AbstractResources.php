@@ -20,7 +20,7 @@ use ING\PHPSDK\UTILS\Utils;
  *
  * @package ING\PHPSDK\RESOURCES
  */
-Abstract class AbstractResources extends Base
+abstract class AbstractResources extends Base
 {
     /**
      * @var string
@@ -75,7 +75,8 @@ Abstract class AbstractResources extends Base
      * @param $headers
      * @return mixed|string
      */
-    public function getAll($headers = null) {
+    public function getAll($headers = null)
+    {
         $opts = array(
             'url' => $this->assembleURL($this->all),
         );
@@ -90,8 +91,9 @@ Abstract class AbstractResources extends Base
      * @param $id
      * @return mixed|string
      */
-    public function getById($id) {
-        $opts = array (
+    public function getById($id)
+    {
+        $opts = array(
            'url' => $this->assembleURL($this->byId, array('id' => $id)),
         );
 
@@ -104,7 +106,8 @@ Abstract class AbstractResources extends Base
      *
      * @param $headers
      */
-    public function getTrashed($headers = null) {
+    public function getTrashed($headers = null)
+    {
         $opts = array(
             'url' => $this->assembleURL($this->trash)
         );
@@ -118,8 +121,8 @@ Abstract class AbstractResources extends Base
      *
      * @param $resources
      */
-    public function add($resources) {
-
+    public function add($resources)
+    {
     }
 
     /**
@@ -127,8 +130,8 @@ Abstract class AbstractResources extends Base
      *
      * @param $resource
      */
-    public function update($resource) {
-
+    public function update($resource)
+    {
     }
 
     /**
@@ -136,8 +139,8 @@ Abstract class AbstractResources extends Base
      *
      * @param $resource
      */
-    public function delete($resource) {
-
+    public function delete($resource)
+    {
     }
 
     /**
@@ -145,8 +148,8 @@ Abstract class AbstractResources extends Base
      *
      * @param $resource
      */
-    public function permanentDelete($resource) {
-
+    public function permanentDelete($resource)
+    {
     }
 
     /**
@@ -156,8 +159,8 @@ Abstract class AbstractResources extends Base
      * @param $headers
      * @param $trash
      */
-    public function search ($input, $headers, $trash) {
-
+    public function search($input, $headers, $trash)
+    {
     }
 
     /**
@@ -166,8 +169,8 @@ Abstract class AbstractResources extends Base
      * @param $input
      * @param $headers
      */
-    public function searchTrash($input, $headers) {
-
+    public function searchTrash($input, $headers)
+    {
     }
 
     /**
@@ -175,7 +178,8 @@ Abstract class AbstractResources extends Base
      *
      * @return int
      */
-    public function count() {
+    public function count()
+    {
         $opts = array(
             'url' => $this->assembleURL($this->all),
             'method' => 'HEAD'
@@ -190,7 +194,8 @@ Abstract class AbstractResources extends Base
      *
      * @return int
      */
-    public function trashCount() {
+    public function trashCount()
+    {
         $opts = array(
             'url' => $this->assembleURL($this->trash),
             'method' => 'HEAD'
@@ -207,7 +212,8 @@ Abstract class AbstractResources extends Base
      * @param array $keys
      * @return string
      */
-    protected function assembleURL(string $route, array $keys = array()) {
+    protected function assembleURL(string $route, array $keys = array())
+    {
         $keys['resource'] = $this->resource;
         return Utils::parseTokens($this->host . $route, $keys);
     }
@@ -217,8 +223,8 @@ Abstract class AbstractResources extends Base
      * @param array $opts
      * @return Request
      */
-    private function buildRequest(array $opts) {
-
+    protected function buildRequest(array $opts)
+    {
         $options = Request::getDefaults();
         $options->token = $this->token;
 
