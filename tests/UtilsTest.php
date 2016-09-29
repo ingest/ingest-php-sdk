@@ -1,34 +1,51 @@
 <?php
+/**
+ * UtilsTest.php
+ *
+ * @author REDspace <https://redspace.com>
+ * @author Jeff Hann <jeff.hann@redspace.com>
+ * @copyright 2016 REDspace
+ * @filesource
+ */
 
-namespace ING\PHPSDK;
+use ING\PHPSDK\UTILS\Utils;
 
-use PHPUnit\Framework\TestCase;
-
-class UtilsTest extends TestCase
-{
-    private $invalid_token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOiIxNDUwMzY2NzkxIiwic3ViIjoiMTIzNDU2Nzg5MCIsIm5hbWUiOiJKb2huIERvZSIsImFkbWluIjp0cnVlfQ.MGdv4o_sNc84OsRlsitw6D933A3zBqEEacEdp30IQeg';
-    private $malformed_token = 'Bearer eyJhbGciOiJIUzI0NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UifQ.xuEv8qrfXu424LZk8bVgr9MQJUIrp1rHcPyZw_KSsds';
-
-    public function testIsExpired()
-    {
-        $utils = new Utils();
-
-        $isExpired = $utils->isExpired($this->invalid_token);
+/**
+ * Class UtilsTest
+ */
+class UtilsTest extends Base {
+    /**
+     * Test an expired token.
+     *
+     * @covers Utils::isExpired
+     */
+    public function testIsExpired() {
+        $isExpired = Utils::isExpired(UtilsTest::INVALID_TOKEN);
         $this->assertTrue($isExpired);
+    }
 
-        $isExpired = $utils->isExpired($this->malformed_token);
+    /**
+     * Test a non-expired token.
+     *
+     * @covers Utils::isExpired
+     */
+    public function testIsExpiredValid() {
+        $isExpired = Utils::isExpired(UtilsTest::MALFORMED_TOKEN);
         $this->assertFalse($isExpired);
     }
 
-    public function testParseTokens()
-    {
-        $utils = new Utils();
-        $t = '/encoding/inputs/<%=id%>/upload<%=method%>';
+    /**
+     * Test that we can properly parse a token template.
+     * @covers Utils::parseToken
+     */
+    public function testParseTokens() {
+        $t = '/encoding/inputs/<%=id%>/upload/<%=method%>';
         
         $h = (object) array(
             'method' => 'methodGoesHere?',
+            'id' => 'jeff'
         );
         
-        $this->assertEquals('methodGoesHere?', $utils->parseTokens($t, $h));
+        $this->assertEquals('/encoding/inputs/jeff/upload/methodGoesHere?', Utils::parseTokens($t, $h));
     }
 }

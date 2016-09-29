@@ -7,3 +7,4 @@ spl_autoload_register(
         include __DIR__ . '/' . $class . '.php';
     }
 );
+
