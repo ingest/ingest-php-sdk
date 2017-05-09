@@ -1,8 +1,8 @@
 <?php
 
-require_once("../abstractAPIUtilities.class.php");
+require_once("../IngestPHPSDK.class.php");
 
-class NetworkKey extends AbstractAPIUtilities
+class NetworkKey extends IngestPHPSDK
 {
   function create()
   {

@@ -1,8 +1,8 @@
 <?php
 
-require_once("../abstractAPIUtilities.class.php");
+require_once("../IngestPHPSDK.class.php");
 
-class Job extends AbstractAPIUtilities
+class Job extends IngestPHPSDK
 {
   function create()
   {

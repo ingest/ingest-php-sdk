@@ -1,8 +1,8 @@
 <?php
 
-require_once("../abstractAPIUtilities.class.php");
+require_once("../IngestPHPSDK.class.php");
 
-class User extends AbstractAPIUtilities
+class User extends IngestPHPSDK
 {
   function create()
   {

@@ -1,8 +1,8 @@
 <?php
 
-require_once("../abstractAPIUtilities.class.php");
+require_once("../IngestPHPSDK.class.php");
 
-class Video extends AbstractAPIUtilities
+class Video extends IngestPHPSDK
 {
   function create()
   {
