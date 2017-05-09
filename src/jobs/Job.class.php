@@ -1,5 +1,7 @@
 <?php
 
+require_once("../abstractAPIUtilities.class.php");
+
 class Job extends AbstractAPIUtilities
 {
   function create()

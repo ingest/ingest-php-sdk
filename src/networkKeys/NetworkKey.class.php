@@ -1,5 +1,7 @@
 <?php
 
+require_once("../abstractAPIUtilities.class.php");
+
 class NetworkKey extends AbstractAPIUtilities
 {
   function create()

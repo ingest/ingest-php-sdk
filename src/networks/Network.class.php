@@ -2,7 +2,7 @@
 
 require_once("../abstractAPIUtilities.class.php");
 
-class User extends AbstractAPIUtilities
+class Network extends AbstractAPIUtilities
 {
   function create()
   {

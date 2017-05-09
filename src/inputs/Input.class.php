@@ -1,5 +1,7 @@
 <?php
 
+require_once("../abstractAPIUtilities.class.php");
+
 class Input extends AbstractAPIUtilities
 {
   function create()
