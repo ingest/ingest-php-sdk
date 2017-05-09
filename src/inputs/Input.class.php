@@ -1,26 +1,8 @@
 <?php
 
-require_once("../IngestPHPSDK.class.php");
+require_once("../AbstractAPIUtilities.class.php");
 
-class Input extends IngestPHPSDK
+class Input extends AbstractAPIUtilities
 {
-  function create()
-  {
 
-  }
-
-  function read()
-  {
-
-  }
-
-  function update()
-  {
-
-  }
-
-  function delete()
-  {
-
-  }
 }

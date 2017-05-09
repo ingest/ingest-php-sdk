@@ -1,25 +1,23 @@
 <?php
 
-require_once("../IngestPHPSDK.class.php");
+require_once("../AbstractAPIUtilities.class.php");
 
-class Video extends IngestPHPSDK
+class Video extends AbstractAPIUtilities
 {
-  function create()
+
+  function __construct($jwt)
+  {
+    //set high-level vars
+    parent::__construct($jwt);
+  }
+
+  //we'll start with these two to start
+  function create($data)
   {
 
   }
 
-  function read()
-  {
-
-  }
-
-  function update()
-  {
-
-  }
-
-  function delete()
+  function get($id)
   {
 
   }
