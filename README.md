@@ -4,7 +4,7 @@ Welcome to the PHP SDK for Ingest! This library has been made available to you s
 
 ## Instantiating an Object
 
-The files are laid out similarly to the Ingest API itself. To create a Video object for your use:
+The files are laid out similarly to the Ingest API itself. To create a Video object *(or an Input, or a Profile, or any other object)* for your use:
 
 ```<?php
 require_once("Video.class.php");
@@ -44,21 +44,100 @@ require_once("Video.class.php");
 
 $video = new Video($version, $credentials, $jwt);
 
-$newVideo = $video->retrieve($id);
+$id = "d810a1a8-fa13-42b6-8276-c5722820253e";
+
+$retrievedVideo = $video->retrieve($id);
 ```
 
 ## Inputs
 
 ### Creating an Input
 
+To create an Input, pass a filename, type, and size to the *create* function:
+
+```
+$filename = "movie.mp4";
+$type = "video/mp4";
+$size = 54102
+
+$newInput = $input->create($filename, $type, $size);
+```
+
 ### Initializing an upload for an Input
+
+Once you've created the Input, you can tell the API you'd like to begin uploading parts of it:
+
+```
+$inputId = "cdac2053-9740-4ce2-89e1-d88997c56463";
+$size = 54102;
+$type = "video/mp4";
+
+$uploadData = $input->initializeUpload($inputId, $size, $type);
+```
+
+### Creating file parts
+
+There are many ways you can do it, but one way is by passing through the file with `fseek()` and `fread()`. You can then keep the parts in memory, write them to disc, whatever you'd prefer.
 
 ### Retrieving a signature for an Input
 
+Once you have the URL to upload parts of your Input to, you'll need a signature for each part. It can be retrieved like so:
+
+```
+$inputId = "cdac2053-9740-4ce2-89e1-d88997c56463";
+$partNumber = 1;
+$uploadId = "7db00eb8-f2a2-41dc-a091-4811de5d65fb";
+$contentMd5 = "Q2hlY2sgSW50ZWdyaXR5IQ=="; // Content-MD5 = md5 + base64: http://www.ietf.org/rfc/rfc1864.txt
+
+$signature = retrieveSignatureForPart($inputId, $partNumber, $uploadId, $contentMd5)
+```
+
+`$contentMd5` is optional, but a nice way of ensuring your file was not corrupted en route to the destination server.
+
 ### Uploading an Input part
+
+When you initialize an upload, you should receive in your response a URL pointing to Amazon S3, as well as several values that must be set as headers for Amazon to accept the upload.
+
+To upload a part, provide:
+* the aforementioned URL and header values
+* a file handle to the file you will be uploading (such as that provided by `fopen()`)
+* (if desired) the value to set for the *Content-MD5* header
+
+For more info, visit Amazon's official documentation: http://docs.aws.amazon.com/AmazonS3/latest/API/mpUploadUploadPart.html
+
+```
+$s3URL = "https://s3.amazon.com/fake";
+$file = fopen("movie1.mp4", "r");
+$partNumber = 1;
+$uploadId = "7db00eb8-f2a2-41dc-a091-4811de5d65fb";
+$authorizationHeader = "whatever";
+$xAmzDateHeader = "the API tells you";
+$xAmzSecurityTokenHeader = "to send";
+$md5Digest = "Q2hlY2sgSW50ZWdyaXR5IQ==";
+
+$uploadResult = uploadPart($s3URL, $file, $partNumber, $uploadId, $authorizationHeader, $xAmzDateHeader, $xAmzSecurityTokenHeader, $md5Digest);
+```
 
 ### Completing an upload for an Input
 
+S3 doesn't know how many parts are in your upload, so you need to tell it when you're done. Compared to the upload process, it's pretty simple:
+
+```
+$inputId = "cdac2053-9740-4ce2-89e1-d88997c56463";
+$uploadId = "7db00eb8-f2a2-41dc-a091-4811de5d65fb";
+
+$completionResult = $input->completeUpload($inputId, $uploadId);
+```
+
 ### Aborting an upload for an Input
+
+Once an upload has started, it must be explicitly either completed or aborted. Otherwise the parts will just float around aimlessly on the server, taking up space and costing money.
+
+```
+$inputId = "cdac2053-9740-4ce2-89e1-d88997c56463";
+$uploadId = "7db00eb8-f2a2-41dc-a091-4811de5d65fb";
+
+$abortResult = $input->abortUpload($inputId, $uploadId);
+```
 
 ### More coming soon!

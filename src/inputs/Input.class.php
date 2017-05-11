@@ -78,11 +78,13 @@ class Input extends AbstractAPIUtilities
     curl_setopt($curl, CURLOPT_INFILESIZE, $filesize);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-    //s3 format
-    //ex. Mon, 1 Nov 2010 20:34:56 +0000
-    $date = date(DATE_RSS);
-
-    $headers = array("Authorization: $authorizationHeader", "Accept: $this->acceptHeader", "Content-Type: application/json", "Content-Length: $filesize", "Date: $date");
+    $headers = array("Authorization: $authorizationHeader",
+      "Accept: $this->acceptHeader",
+      "Content-Type: application/json",
+      "Content-Length: $filesize",
+      "x-amz-date: $xAmzDateHeader",
+      "x-amz-security-token: $xAmzSecurityTokenHeader",
+    );
 
     if(isset($md5Digest))
     {
