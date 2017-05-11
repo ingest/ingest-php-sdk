@@ -4,9 +4,9 @@ require_once("../AbstractAPIUtilities.class.php");
 
 class Job extends AbstractAPIUtilities
 {
-  function __construct($jwt, $version)
+  function __construct($version, $credentials, $jwt)
   {
     //set high-level vars
-    parent::__construct($jwt, $version);
+    parent::__construct($version, $credentials, $jwt);
   }
 }
