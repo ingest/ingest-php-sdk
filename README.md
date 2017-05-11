@@ -100,14 +100,14 @@ When you initialize an upload, you should receive in your response a URL pointin
 
 To upload a part, provide:
 * the aforementioned URL and header values
-* a file handle to the file you will be uploading (such as that provided by `fopen()`)
+* the path of the part you will be uploading
 * (if desired) the value to set for the *Content-MD5* header
 
 For more info, visit Amazon's official documentation: http://docs.aws.amazon.com/AmazonS3/latest/API/mpUploadUploadPart.html
 
 ```
 $s3URL = "https://s3.amazon.com/fake";
-$file = fopen("movie1.mp4", "r");
+$file = "movie1.mp4"
 $partNumber = 1;
 $uploadId = "7db00eb8-f2a2-41dc-a091-4811de5d65fb";
 $authorizationHeader = "whatever";

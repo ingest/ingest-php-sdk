@@ -64,18 +64,20 @@ class Input extends AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
-  function uploadPart($s3URL, $file, $partNumber, $uploadId, $authorizationHeader, $xAmzDateHeader, $xAmzSecurityTokenHeader, $md5Digest)
+  function uploadPart($s3URL, $filePath, $partNumber, $uploadId, $authorizationHeader, $xAmzDateHeader, $xAmzSecurityTokenHeader, $md5Digest)
   {
     //we're going straight to S3 in this step
     //so things look a little different
 
     $curl = curl_init($s3URL . "?partNumber={$partNumber}&uploadId={$uploadId}");
     curl_setopt($curl, CURLOPT_PUT,1);
-    curl_setopt($curl, CURLOPT_INFILE, $file);
 
-    $filesize = filesize($file);
+    $fileStream = fopen($filePath, "r");
+    curl_setopt($curl, CURLOPT_INFILE, $fileStream);
 
+    $filesize = filesize($filePath);
     curl_setopt($curl, CURLOPT_INFILESIZE, $filesize);
+
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
     $headers = array("Authorization: $authorizationHeader",
