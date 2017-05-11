@@ -10,6 +10,10 @@ The files are laid out similarly to the Ingest API itself. To create a Video obj
 require_once("Video.class.php");
 
 $video = new Video($version, $credentials, $jwt);
+//OR
+$video = new Video($version, null, $jwt);
+//OR
+$video = new Video($version, $credentials);
 
 $newVideo = $video->retrieve($id);
 ```

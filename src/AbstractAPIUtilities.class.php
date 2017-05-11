@@ -43,7 +43,7 @@ abstract class AbstractAPIUtilities
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, "{}");
+    curl_setopt($curl, CURLOPT_POSTFIELDS, "{}");
     curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->jwt", "Accept: $this->acceptHeader", "Content-Type: application/json"));
     curl_setopt($curl, CURLOPT_HEADER, true);
 
