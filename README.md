@@ -85,6 +85,17 @@ $uploadData = $input->initializeUpload($inputId, $size, $type);
 
 There are many ways you can do it, but one way is by passing through the file with `fseek()` and `fread()`. You can then keep the parts in memory, write them to disc, whatever you'd prefer.
 
+You can use the `chunkFile` function provided by the SDK:
+
+```
+$input = new Input($version);
+
+//size optional, defaults to 5,000,000 bytes
+$input->chunkFile($filePath, $chunkSizeInBytes)
+```
+
+By default, this will separate the file into chunks of the specified size, and write these chunks to the current folder.
+
 ### Retrieving a signature for an Input
 
 Once you have the URL to upload parts of your Input to, you'll need a signature for each part. It can be retrieved like so:

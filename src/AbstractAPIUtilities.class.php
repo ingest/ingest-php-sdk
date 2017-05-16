@@ -9,6 +9,35 @@ abstract class AbstractAPIUtilities
     $this->acceptHeader = $version;
   }
 
+  function chunkFile($filePath, $chunkSize = 5000000)
+  {
+    //figure out how many chunks are needed
+    $numChunks = ceil(filesize($filePath)/$chunkSize);
+
+    //open the handle of the source file
+    $handle = fopen($filePath, "rb");
+
+    for ($i=0; $i < $numChunks ; $i++)
+    {
+      //open the handle of the chunk
+      //set filename to original filename, without leading folders or trailing extension, followed by _chunk and the chunk number
+      $chunkHandle = fopen(basename($filePath, ".".pathinfo($filePath, PATHINFO_EXTENSION))."_chunk{$i}.".pathinfo($filePath, PATHINFO_EXTENSION), "wb");
+
+      //read chunk data into memory
+      $contents = fread($handle, $chunkSize);
+
+      //write chunk to disc (optional, you could do this all in memory if you wanted)
+      fwrite($chunkHandle, $contents);
+
+      //close chunk handle
+      fclose($chunkHandle);
+    }
+
+    //close source file handle
+    fclose($handle);
+
+  }
+
   function generateTokens($refreshToken, $clientId, $clientSecret)
   {
     $curl = curl_init();
