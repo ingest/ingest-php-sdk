@@ -14,7 +14,7 @@ $video = new Video($version);
 
 $tokens = $video->generateTokens($refreshToken, $clientId, $clientSecret);
 
-$video->setJWT($tokens["content"]->access_token);
+$video->setAccessToken($tokens["content"]->access_token);
 //you should also store the value of $tokens["content"]->refresh_token somewhere, so you can generate another access token later (even after your current one expires)
 
 $newVideo = $video->retrieve($id);
@@ -49,7 +49,7 @@ $video = new Video($version);
 
 $tokens = $video->generateTokens($refreshToken, $clientId, $clientSecret);
 
-$video->setJWT($tokens["content"]->access_token);
+$video->setAccessToken($tokens["content"]->access_token);
 //also store the value of $tokens["content"]->refresh_token somewhere to generate another token later
 
 $newVideo = $video->retrieve($id);
