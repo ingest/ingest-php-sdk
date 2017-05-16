@@ -1,6 +1,6 @@
 <?php
 
-require_once("../AbstractAPIUtilities.class.php");
+require_once(dirname(__DIR__) . "/AbstractAPIUtilities.class.php");
 
 class Video extends AbstractAPIUtilities
 {
