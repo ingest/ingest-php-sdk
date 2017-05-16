@@ -5,10 +5,10 @@ require_once("../AbstractAPIUtilities.class.php");
 class Input extends AbstractAPIUtilities
 {
 
-  function __construct($version, $credentials, $jwt)
+  function __construct($version)
   {
     //set high-level vars
-    parent::__construct($version, $credentials, $jwt);
+    parent::__construct($version);
   }
 
   function create($filename, $type, $size)
@@ -17,7 +17,7 @@ class Input extends AbstractAPIUtilities
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array("filename"=>$filename, "type"=>$type, "size"=>$size)));
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->jwt", "Accept: $this->acceptHeader", "Content-Type: application/json"));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: application/json"));
     curl_setopt($curl, CURLOPT_HEADER, true);
 
     $response = curl_exec($curl);
@@ -33,7 +33,7 @@ class Input extends AbstractAPIUtilities
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array("size"=>$size, "type"=>$type)));
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->jwt", "Accept: $this->acceptHeader", "Content-Type: application/json"));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: application/json"));
     curl_setopt($curl, CURLOPT_HEADER, true);
 
     $response = curl_exec($curl);
@@ -105,7 +105,7 @@ class Input extends AbstractAPIUtilities
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array("uploadId"=>$uploadId)));
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->jwt", "Accept: $this->acceptHeader", "Content-Type: application/json"));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: application/json"));
     curl_setopt($curl, CURLOPT_HEADER, true);
 
     $response = curl_exec($curl);
@@ -120,7 +120,7 @@ class Input extends AbstractAPIUtilities
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array("uploadId"=>$uploadId)));
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->jwt", "Accept: $this->acceptHeader", "Content-Type: application/json"));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: application/json"));
     curl_setopt($curl, CURLOPT_HEADER, true);
 
     $response = curl_exec($curl);

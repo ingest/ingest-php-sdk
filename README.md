@@ -6,22 +6,21 @@ Welcome to the PHP SDK for Ingest! This library has been made available to you s
 
 The files are laid out similarly to the Ingest API itself. To create a Video object *(or an Input, or a Profile, or any other object)* for your use:
 
-```<?php
+```
+<?php
 require_once("Video.class.php");
 
-$video = new Video($version, $credentials, $jwt);
-//OR
-$video = new Video($version, null, $jwt);
-//OR
-$video = new Video($version, $credentials);
+$video = new Video($version);
+
+$tokens = $video->generateTokens($refreshToken, $clientId, $clientSecret);
+
+$video->setJWT($tokens["content"]->access_token);
+//you should also store the value of $tokens["content"]->refresh_token somewhere, so you can generate another access token later (even after your current one expires)
 
 $newVideo = $video->retrieve($id);
 ```
 
-To instantiate a Video object, you must pass the API version you wish to use, and at least one of the following:
-
-* your application credentials (an associative array with the keys *grant_type*, *client_id*, *client_secret*, and optionally *redirect_uri*, and their corresponding values)
-* a valid Ingest JWT (JSON Web Token, more info available at https://jwt.io)
+To instantiate a Video object, you must pass the API version you wish to use. After that, you authenticate with your refresh token, client ID, and client secret (all pulled from settings).
 
 Assuming authentication goes well, and you pass a valid Video ID, this code would return a Video to you, via the Ingest API. The response would be an associative array, with three elements:
 
@@ -35,7 +34,7 @@ Assuming authentication goes well, and you pass a valid Video ID, this code woul
 
 **content** contains whatever the API returned as the body of the response. Ingest sends the body as JSON, but the SDK decodes it to its PHP datatype, be that a string, an object, or an array. Of course, if it's an object or an array, it may contain other objects, strings, or arrays. Please check the Ingest documentation so you know what to expect.
 
-If there was an authentication error, this will be reported to you in the **status** and **content** fields. There may also be information in the **headers** for some errors, like trying to authenticate too often.
+If there was an authentication error, this will be reported to you in the **status** and **content** fields. There may also be information in the **headers** for some errors, like trying to query the API too often.
 
 ## Videos
 
@@ -46,11 +45,14 @@ To retrieve a video, pass the Video's ID to the *retrieve* function:
 ```<?php
 require_once("Video.class.php");
 
-$video = new Video($version, $credentials, $jwt);
+$video = new Video($version);
 
-$id = "d810a1a8-fa13-42b6-8276-c5722820253e";
+$tokens = $video->generateTokens($refreshToken, $clientId, $clientSecret);
 
-$retrievedVideo = $video->retrieve($id);
+$video->setJWT($tokens["content"]->access_token);
+//also store the value of $tokens["content"]->refresh_token somewhere to generate another token later
+
+$newVideo = $video->retrieve($id);
 ```
 
 ## Inputs
