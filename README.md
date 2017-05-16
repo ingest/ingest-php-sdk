@@ -55,6 +55,23 @@ $video->setAccessToken($tokens["content"]->access_token);
 $newVideo = $video->retrieve($id);
 ```
 
+### Retrieving all Videos
+
+To retrieve all videos, use the *retrieveAll* function:
+
+```<?php
+require_once("Video.class.php");
+
+$video = new Video($version);
+
+$tokens = $video->generateTokens($refreshToken, $clientId, $clientSecret);
+
+$video->setAccessToken($tokens["content"]->access_token);
+//also store the value of $tokens["content"]->refresh_token somewhere to generate another token later
+
+$newVideos = $video->retrieveAll();
+```
+
 ## Inputs
 
 ### Creating an Input
