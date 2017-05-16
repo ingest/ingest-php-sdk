@@ -21,7 +21,8 @@ abstract class AbstractAPIUtilities
     {
       //open the handle of the chunk
       //set filename to original filename, without leading folders or trailing extension, followed by _chunk and the chunk number
-      $chunkHandle = fopen(basename($filePath, ".".pathinfo($filePath, PATHINFO_EXTENSION))."_chunk{$i}.".pathinfo($filePath, PATHINFO_EXTENSION), "wb");
+      $chunkNumber = $i + 1;
+      $chunkHandle = fopen(basename($filePath, ".".pathinfo($filePath, PATHINFO_EXTENSION))."_chunk{$chunkNumber}.".pathinfo($filePath, PATHINFO_EXTENSION), "wb");
 
       //read chunk data into memory
       $contents = fread($handle, $chunkSize);
@@ -66,6 +67,12 @@ abstract class AbstractAPIUtilities
   {
     //grab content length
     $contentLength = curl_getinfo($curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+
+    //sometimes, no Content-Length header
+    if(is_null($contentLength))
+    {
+      $contentLength = strlen($response) - strpos($response, "\r\n\r\n");
+    }
 
     //split response into content and headers
     //count backwards from end of string, then json_decode result

@@ -94,7 +94,7 @@ $input = new Input($version);
 $input->chunkFile($filePath, $chunkSizeInBytes)
 ```
 
-By default, this will separate the file into chunks of the specified size, and write these chunks to the current folder.
+By default, this will separate the file into chunks of the specified size, and write these chunks to the current folder, with `chunk` appended. So *"testvideo.mp4"* would become *"testvideo_chunk1.mp4", "testvideo_chunk2.mp4", "testvideo_chunk3.mp4"...* and so on.
 
 ### Retrieving a signature for an Input
 

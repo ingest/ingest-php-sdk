@@ -13,10 +13,10 @@ class Input extends AbstractAPIUtilities
 
   function create($filename, $type, $size)
   {
-    $curl = curl_init($this->apiURL . "encoding/inputs/");
+    $curl = curl_init($this->apiURL . "encoding/inputs");
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array("filename"=>$filename, "type"=>$type, "size"=>$size)));
+    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array("filename"=>$filename, "type"=>$type, "size"=>$size)));
     curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: application/json"));
     curl_setopt($curl, CURLOPT_HEADER, true);
 
@@ -32,7 +32,7 @@ class Input extends AbstractAPIUtilities
     $curl = curl_init($this->apiURL . "encoding/inputs/{$inputId}/upload?type=amazonMP");
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array("size"=>$size, "type"=>$type)));
+    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array("size"=>$size, "type"=>$type)));
     curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: application/json"));
     curl_setopt($curl, CURLOPT_HEADER, true);
 
@@ -57,7 +57,7 @@ class Input extends AbstractAPIUtilities
       $headers[] = "ContentMd5: $contentMd5";
     }
 
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
+    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($body));
 
     $response = curl_exec($curl);
 
@@ -104,7 +104,7 @@ class Input extends AbstractAPIUtilities
     $curl = curl_init($this->apiURL . "encoding/inputs/{$inputId}/upload/complete");
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array("uploadId"=>$uploadId)));
+    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array("uploadId"=>$uploadId)));
     curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: application/json"));
     curl_setopt($curl, CURLOPT_HEADER, true);
 
@@ -119,7 +119,7 @@ class Input extends AbstractAPIUtilities
     $curl = curl_init($this->apiURL . "encoding/inputs/{$inputId}/upload/abort?type=amazonMP");
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array("uploadId"=>$uploadId)));
+    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array("uploadId"=>$uploadId)));
     curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: application/json"));
     curl_setopt($curl, CURLOPT_HEADER, true);
 
