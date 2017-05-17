@@ -8,7 +8,7 @@ The files are laid out similarly to the Ingest API itself. To create a Video obj
 
 ```
 <?php
-require_once("Video.class.php");
+use \IngestPHPSDK\Videos\Video;
 
 $video = new Video($version);
 
@@ -43,7 +43,7 @@ If there was an authentication error, this will be reported to you in the **stat
 To retrieve a video, pass the Video's ID to the *retrieve* function:
 
 ```<?php
-require_once("Video.class.php");
+use \IngestPHPSDK\Videos\Video;
 
 $video = new Video($version);
 
@@ -60,7 +60,7 @@ $newVideo = $video->retrieve($id);
 To retrieve all videos, use the *retrieveAll* function:
 
 ```<?php
-require_once("Video.class.php");
+use \IngestPHPSDK\Videos\Video;
 
 $video = new Video($version);
 
