@@ -1,4 +1,5 @@
 <?php
+namespace IngestPHPSDK;
 
 abstract class AbstractAPIUtilities
 {

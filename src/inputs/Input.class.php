@@ -1,8 +1,7 @@
 <?php
+namespace IngestPHPSDK\Inputs;
 
-require_once("../AbstractAPIUtilities.class.php");
-
-class Input extends AbstractAPIUtilities
+class Input extends \IngestPHPSDK\AbstractAPIUtilities
 {
 
   function __construct($version)

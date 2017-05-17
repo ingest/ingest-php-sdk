@@ -1,8 +1,7 @@
 <?php
+namespace IngestPHPSDK\Videos;
 
-require_once(dirname(__DIR__) . "/AbstractAPIUtilities.class.php");
-
-class Video extends AbstractAPIUtilities
+class Video extends \IngestPHPSDK\AbstractAPIUtilities
 {
   function __construct($version)
   {
