@@ -66,14 +66,9 @@ abstract class AbstractAPIUtilities
   //returns formatted array
   function responseProcessor($response, $curl)
   {
-    //grab content length
-    $contentLength = curl_getinfo($curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
-
-    //sometimes, no Content-Length header
-    if(is_null($contentLength))
-    {
-      $contentLength = strlen($response) - strpos($response, "\r\n\r\n");
-    }
+    //would like to use Content-Length header
+    //not reliably provided
+    $contentLength = strlen($response) - strpos($response, "\r\n\r\n");
 
     //split response into content and headers
     //count backwards from end of string, then json_decode result
