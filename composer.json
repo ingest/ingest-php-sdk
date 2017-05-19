@@ -1,5 +1,5 @@
 {
-    "name": "ingest/phpsdk",
+    "name": "ingest/php-sdk",
     "description": "Allows for easy access to the Ingest API",
     "type": "library",
     "license": "proprietary",
