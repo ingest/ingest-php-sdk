@@ -1,7 +1,19 @@
 {
-  "autoload": {
-    "psr-4": {
-      "IngestPHPSDK\\":"src/"
-    }
-  }
+    "name": "ingest/phpsdk",
+    "description": "Allows for easy access to the Ingest API",
+    "type": "library",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Stephen Smith",
+            "email": "stephen.smith@redspace.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "IngestPHPSDK\\":"src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {}
 }
