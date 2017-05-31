@@ -10,19 +10,16 @@ The files are laid out similarly to the Ingest API itself. To create a Video obj
 <?php
 use \IngestPHPSDK\Videos\Video;
 
-$video = new Video($version);
+$version = "application/vnd.ingest.v1+json";
 
-$tokens = $video->generateTokens($refreshToken, $clientId, $clientSecret);
+$accessToken = "your.access_token.here";
 
-$video->setAccessToken($tokens["content"]->access_token);
-//you should also store the value of $tokens["content"]->refresh_token somewhere, so you can generate another access token later (even after your current one expires)
+$video = new Video($version, $accessToken);
 
-$newVideo = $video->retrieve($id);
+$newVideo = $video->retrieveAll();
 ```
 
-To instantiate a Video object, you must pass the API version you wish to use. After that, you authenticate with your refresh token, client ID, and client secret (all pulled from settings).
-
-Assuming authentication goes well, and you pass a valid Video ID, this code would return a Video to you, via the Ingest API. The response would be an associative array, with three elements:
+To instantiate a Video object, you must pass the API version you wish to use and a valid access token. This code would then return a list of all videos available to you, via the Ingest API. The response would be an associative array, with three elements:
 
 * status
 * headers
@@ -45,12 +42,13 @@ To retrieve a video, pass the Video's ID to the *retrieve* function:
 ```<?php
 use \IngestPHPSDK\Videos\Video;
 
-$video = new Video($version);
+$version = "application/vnd.ingest.v1+json";
 
-$tokens = $video->generateTokens($refreshToken, $clientId, $clientSecret);
+$accessToken = "your.access_token.here";
 
-$video->setAccessToken($tokens["content"]->access_token);
-//also store the value of $tokens["content"]->refresh_token somewhere to generate another token later
+$video = new Video($version, $accessToken);
+
+$id = "8d790637-fc1c-4833-afe2-52f6a7957638";
 
 $newVideo = $video->retrieve($id);
 ```
@@ -62,12 +60,11 @@ To retrieve all videos, use the *retrieveAll* function:
 ```<?php
 use \IngestPHPSDK\Videos\Video;
 
-$video = new Video($version);
+$version = "application/vnd.ingest.v1+json";
 
-$tokens = $video->generateTokens($refreshToken, $clientId, $clientSecret);
+$accessToken = "your.access_token.here";
 
-$video->setAccessToken($tokens["content"]->access_token);
-//also store the value of $tokens["content"]->refresh_token somewhere to generate another token later
+$video = new Video($version, $accessToken);
 
 $newVideos = $video->retrieveAll();
 ```
