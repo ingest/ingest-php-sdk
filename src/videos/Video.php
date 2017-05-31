@@ -11,7 +11,7 @@ class Video extends \IngestPHPSDK\AbstractAPIUtilities
 
   function retrieveAll()
   {
-    $curl = curl_init($this->apiURL . "videosHOOOOOOOOOOOOOOOOOOOOOONK");
+    $curl = curl_init($this->apiURL . "videos");
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader"));
     curl_setopt($curl, CURLOPT_HEADER, true);
