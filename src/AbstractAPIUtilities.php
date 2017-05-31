@@ -3,11 +3,12 @@ namespace IngestPHPSDK;
 
 abstract class AbstractAPIUtilities
 {
-  function __construct($version)
+  function __construct($version, $accessToken)
   {
     //set some defaults
     $this->apiURL = "https://api.ingest.info/";
     $this->acceptHeader = $version;
+    $this->accessToken = $accessToken;
   }
 
   function chunkFile($filePath, $chunkSize = 5000000)
@@ -38,28 +39,6 @@ abstract class AbstractAPIUtilities
     //close source file handle
     fclose($handle);
 
-  }
-
-  function generateTokens($refreshToken, $clientId, $clientSecret)
-  {
-    $curl = curl_init();
-
-    $url = "https://login.ingest.info/token?grant_type=refresh_token&client_id={$clientId}&client_secret={$clientSecret}&refresh_token={$refreshToken}";
-
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_HEADER, true);
-
-    $response = curl_exec($curl);
-
-    return $this->responseProcessor($response, $curl);
-
-  }
-
-  function setAccessToken($accessToken)
-  {
-    $this->accessToken = $accessToken;
   }
 
   //takes in response string and curl handle

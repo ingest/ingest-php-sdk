@@ -4,10 +4,10 @@ namespace IngestPHPSDK\Inputs;
 class Input extends \IngestPHPSDK\AbstractAPIUtilities
 {
 
-  function __construct($version)
+  function __construct($version, $accessToken)
   {
     //set high-level vars
-    parent::__construct($version);
+    parent::__construct($version, $accessToken);
   }
 
   function create($filename, $type, $size)
