@@ -24,14 +24,12 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
-  function initializeUpload($inputId, $size, $type)
+  function initializeUpload($inputId, $size, $contentType, $uploadType)
   {
-    //we're doing only multi-part uploads for now
-    //if we need <5MB video uploads, we'll add them later
-    $curl = curl_init($this->apiURL . "encoding/inputs/{$inputId}/upload?type=amazonMP");
+    $curl = curl_init($this->apiURL . "encoding/inputs/{$inputId}/upload?type={$uploadType}");
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array("size"=>$size, "type"=>$type)));
+    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array("size"=>$size, "type"=>$contentType)));
     curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: application/json"));
     curl_setopt($curl, CURLOPT_HEADER, true);
 
@@ -40,23 +38,25 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
-  function retrieveSignatureForPart($inputId, $partNumber, $uploadId, $contentMd5)
+  function retrieveSignatureForPart($inputId, $partNumber, $uploadId, $contentMd5, $uploadType)
   {
-    $curl = curl_init($this->apiURL . "encoding/inputs/{$inputId}/upload/sign?type=amazonMP");
+    $curl = curl_init($this->apiURL . "encoding/inputs/{$inputId}/upload/sign?type={$uploadType}");
 
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: $authorizationHeader", "Accept: $this->acceptHeader", "Content-Type: application/json"));
     curl_setopt($curl, CURLOPT_HEADER, true);
 
-    $body = array("partNumber"=>$partNumber, "uploadId"=>$uploadId);
+    if($uploadType == "amazonMP")
+    {
+      $body = array("partNumber"=>$partNumber, "uploadId"=>$uploadId);
+      curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($body));
+    }
 
     if(isset($contentMd5))
     {
       $headers[] = "ContentMd5: $contentMd5";
     }
-
-    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($body));
 
     $response = curl_exec($curl);
 
