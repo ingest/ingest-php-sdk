@@ -20,18 +20,11 @@ class ComposerStaticInit04849ed8dae2ed7937d621d8e646088c
         ),
     );
 
-    public static $classMap = array (
-        'IngestPHPSDK\\AbstractAPIUtilities' => __DIR__ . '/../..' . '/src/AbstractAPIUtilities.class.php',
-        'IngestPHPSDK\\Inputs\\Input' => __DIR__ . '/../..' . '/src/inputs/Input.class.php',
-        'IngestPHPSDK\\Videos\\Video' => __DIR__ . '/../..' . '/src/videos/Video.class.php',
-    );
-
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit04849ed8dae2ed7937d621d8e646088c::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit04849ed8dae2ed7937d621d8e646088c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit04849ed8dae2ed7937d621d8e646088c::$classMap;
 
         }, null, ClassLoader::class);
     }

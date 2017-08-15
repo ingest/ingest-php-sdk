@@ -6,7 +6,4 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'IngestPHPSDK\\AbstractAPIUtilities' => $baseDir . '/src/AbstractAPIUtilities.class.php',
-    'IngestPHPSDK\\Inputs\\Input' => $baseDir . '/src/inputs/Input.class.php',
-    'IngestPHPSDK\\Videos\\Video' => $baseDir . '/src/videos/Video.class.php',
 );
