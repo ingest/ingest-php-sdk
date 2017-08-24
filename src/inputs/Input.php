@@ -10,14 +10,106 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
     parent::__construct($version, $accessToken);
   }
 
+  function count($filter = null)
+  {
+    if ($filter == null)
+    {
+      $curl = curl_init($this->apiURL . "encoding/inputs");
+    }
+    else
+    {
+      $curl = curl_init($this->apiURL . "encoding/inputs?filter={$filter}");
+    }
+
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader"));
+    curl_setopt($curl, CURLOPT_HEADER, true);
+
+    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'HEAD');
+
+    $response = curl_exec($curl);
+
+    return $this->responseProcessor($response, $curl);
+  }
+
+  function getAll($filter = null, $range = null)
+  {
+    if($filter == null)
+    {
+      $curl = curl_init($this->apiURL . "encoding/inputs");
+    }
+    else
+    {
+      $curl = curl_init($this->apiURL . "encoding/inputs?filter={$filter}");
+    }
+
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+    if($range != null)
+    {
+      curl_setopt($curl, CURLOPT_HTTPHEADER, array("Range: $range", "Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader"));
+    }
+    else
+    {
+      curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader"));
+    }
+
+    curl_setopt($curl, CURLOPT_HEADER, true);
+
+    $response = curl_exec($curl);
+
+    return $this->responseProcessor($response, $curl);
+  }
+
+  function getById($inputId)
+  {
+    $curl = curl_init($this->apiURL . "encoding/inputs/{$inputId}");
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader"));
+    curl_setopt($curl, CURLOPT_HEADER, true);
+
+    $response = curl_exec($curl);
+
+    return $this->responseProcessor($response, $curl);
+  }
+
   function create($filename, $type, $size)
   {
     $curl = curl_init($this->apiURL . "encoding/inputs");
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array("filename"=>$filename, "type"=>$type, "size"=>$size)));
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: application/json"));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: $this->expectedResponseContentType"));
     curl_setopt($curl, CURLOPT_HEADER, true);
+
+    $response = curl_exec($curl);
+
+    return $this->responseProcessor($response, $curl);
+  }
+
+  function update($inputId, $body)
+  {
+    $curl = curl_init($this->apiURL . "encoding/inputs/$inputId");
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: $this->expectedResponseContentType"));
+    curl_setopt($curl, CURLOPT_HEADER, true);
+
+    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
+    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($body));
+
+    $response = curl_exec($curl);
+
+    return $this->responseProcessor($response, $curl);
+  }
+
+  function delete($inputId)
+  {
+    $curl = curl_init($this->apiURL . "encoding/inputs/$inputId");
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader"));
+    curl_setopt($curl, CURLOPT_HEADER, true);
+
+    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
 
     $response = curl_exec($curl);
 
@@ -30,7 +122,7 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array("size"=>$size, "type"=>$contentType)));
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: application/json"));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: $this->expectedResponseContentType"));
     curl_setopt($curl, CURLOPT_HEADER, true);
 
     $response = curl_exec($curl);
@@ -44,7 +136,7 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
 
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: $authorizationHeader", "Accept: $this->acceptHeader", "Content-Type: application/json"));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: $authorizationHeader", "Accept: $this->acceptHeader", "Content-Type: $this->expectedResponseContentType"));
     curl_setopt($curl, CURLOPT_HEADER, true);
 
     if($uploadType == "amazonMP")
@@ -81,7 +173,7 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
 
     $headers = array("Authorization: $authorizationHeader",
       "Accept: $this->acceptHeader",
-      "Content-Type: application/json",
+      "Content-Type: $this->expectedResponseContentType",
       "Content-Length: $filesize",
       "x-amz-date: $xAmzDateHeader",
       "x-amz-security-token: $xAmzSecurityTokenHeader",
@@ -104,7 +196,7 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array("uploadId"=>$uploadId)));
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: application/json"));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: $this->expectedResponseContentType"));
     curl_setopt($curl, CURLOPT_HEADER, true);
 
     $response = curl_exec($curl);
@@ -119,7 +211,7 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode(array("uploadId"=>$uploadId)));
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: application/json"));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: $this->expectedResponseContentType"));
     curl_setopt($curl, CURLOPT_HEADER, true);
 
     $response = curl_exec($curl);
