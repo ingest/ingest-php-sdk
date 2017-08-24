@@ -45,6 +45,12 @@ abstract class AbstractAPIUtilities
   //returns formatted array
   function responseProcessor($response, $curl)
   {
+    if(preg_match("/^HTTP\/1\.1 100 Continue\r\n\r\n/", $response) === 1)
+    {
+      //take off 100 Continue responses
+      $response = substr($response, strpos($response, "100 Continue") + 16);
+    }
+
     //would like to use Content-Length header
     //not reliably provided
     $contentLength = strlen($response) - strpos($response, "\r\n\r\n");
