@@ -91,7 +91,7 @@ class Video extends \IngestPHPSDK\AbstractAPIUtilities
   }
 
   /**
-   * Returns all the Videos your token has access to.
+   * Returns a count of all the Videos your token has access to.
    *
    * @param string $status  A status to filter results by. Check main API documentation for options.
    * @param string $private Whether to return videos that require a playback token or not. Check main API documentation for options.
