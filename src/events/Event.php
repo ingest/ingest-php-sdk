@@ -70,7 +70,7 @@ class Event extends \IngestPHPSDK\AbstractAPIUtilities
   }
 
   /**
-   * Returns all the Events that have occurred in your Network.
+   * Returns a specific event that has occurred in your Network.
    *
    * @param string $eventId The ID of the Event you wish to retrieve.
    *
