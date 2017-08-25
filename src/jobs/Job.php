@@ -74,6 +74,13 @@ class Job extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Returns a specific Job.
+   *
+   * @param string $jobId The ID of the Job you wish to retrieve.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function getById($jobId)
   {
     $curl = curl_init($this->apiURL . "encoding/jobs/{$jobId}");
@@ -87,6 +94,13 @@ class Job extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Deletes a Job.
+   *
+   * @param string $jobId The ID of the Job to delete.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function delete($jobId)
   {
     $curl = curl_init($this->apiURL . "encoding/jobs/{$jobId}");
