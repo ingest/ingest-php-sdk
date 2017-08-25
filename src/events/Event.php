@@ -1,4 +1,8 @@
 <?php
+/**
+ * Events are triggered by multiple happenings within your Ingest account, these functions help you access and manipulate them.
+ */
+
 namespace IngestPHPSDK\Events;
 
 class Event extends \IngestPHPSDK\AbstractAPIUtilities
@@ -9,6 +13,11 @@ class Event extends \IngestPHPSDK\AbstractAPIUtilities
     parent::__construct($version, $accessToken);
   }
 
+  /**
+   * Returns a count of all Events that have occurred in your Network.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function count()
   {
     $curl = curl_init($this->apiURL . "events");
@@ -24,6 +33,11 @@ class Event extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Returns all the Event types that exist.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function getTypes()
   {
     $curl = curl_init($this->apiURL . "events/types");
@@ -37,6 +51,11 @@ class Event extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Returns all the Events that have occurred in your Network.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function getAll()
   {
     $curl = curl_init($this->apiURL . "events");
@@ -50,6 +69,13 @@ class Event extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Returns all the Events that have occurred in your Network.
+   *
+   * @param string $eventId The ID of the Event you wish to retrieve.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function getById($eventId)
   {
     $curl = curl_init($this->apiURL . "events/{$eventId}");
