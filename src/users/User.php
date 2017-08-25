@@ -1,4 +1,8 @@
 <?php
+/**
+ * Users are entities able to create and manipulate resources within your Ingest account, according to their permissions. These functions help manage them.
+ */
+
 namespace IngestPHPSDK\Users;
 
 class User extends \IngestPHPSDK\AbstractAPIUtilities
@@ -9,6 +13,11 @@ class User extends \IngestPHPSDK\AbstractAPIUtilities
     parent::__construct($version, $accessToken);
   }
 
+  /**
+   * Returns a count of all Users your token has access to.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function count()
   {
     $curl = curl_init($this->apiURL . "users");
@@ -24,6 +33,11 @@ class User extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Returns information about the User whose token is passed with the request.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function getCurrentUserInfo()
   {
     $curl = curl_init($this->apiURL . "users/me");
@@ -38,6 +52,11 @@ class User extends \IngestPHPSDK\AbstractAPIUtilities
 
   }
 
+  /**
+   * Returns information about the User whose ID is passed with the request.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function getById($userId)
   {
     $curl = curl_init($this->apiURL . "users/{$userId}");
@@ -51,6 +70,11 @@ class User extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Returns information about all Users your token has access to.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function getAll()
   {
     $curl = curl_init($this->apiURL . "users");
@@ -64,6 +88,14 @@ class User extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Allows you to update the properties of a User.
+   *
+   * @param string $userId The ID of the User to update.
+   * @param array  $body   The properties to update, and what to update them to.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function update($userId, $body)
   {
     $curl = curl_init($this->apiURL . "users/{$userId}");
@@ -80,6 +112,14 @@ class User extends \IngestPHPSDK\AbstractAPIUtilities
 
   }
 
+  /**
+   * Allows you to transfer authorship of resources like Videos from User to User.
+   *
+   * @param string $UserIdTransferredFrom The ID of the User that currently has the authorship.
+   * @param string $UserIdTransferredTo The ID of the User that will get the authorship.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function transferUserAuthorship($UserIdTransferredFrom, $UserIdTransferredTo)
   {
     $curl = curl_init($this->apiURL . "users/{$UserIdTransferredFrom}/transfer/{$UserIdTransferredTo}");
@@ -94,6 +134,11 @@ class User extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Revokes the token passed with the request.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function revokeCurrentUser()
   {
     $curl = curl_init($this->apiURL . "users/me/revoke");
@@ -108,6 +153,13 @@ class User extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Revokes the session of the User whose ID is provided.
+   *
+   * @param string $userId The ID of the User whose session will be revoked.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function revokeUser($userId)
   {
     $curl = curl_init($this->apiURL . "users/{$userId}/revoke");
