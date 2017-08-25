@@ -80,6 +80,13 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Returns information about a specific Input.
+   *
+   * @param string $inputId The ID of the Input in question.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function getById($inputId)
   {
     $curl = curl_init($this->apiURL . "encoding/inputs/{$inputId}");
@@ -92,6 +99,15 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Create an Input.
+   *
+   * @param string $filename The name of the file to be created as an Input.
+   * @param string $type     The file type (check main API documentation for options).
+   * @param string $size     The file size, in bytes.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function create($filename, $type, $size)
   {
     $curl = curl_init($this->apiURL . "encoding/inputs");
@@ -106,6 +122,14 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Allows you to update the properties of a Input.
+   *
+   * @param string $inputId The ID of the Input to update.
+   * @param array  $body    The properties to update, and what to update them to.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function update($inputId, $body)
   {
     $curl = curl_init($this->apiURL . "encoding/inputs/$inputId");
@@ -121,6 +145,13 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Deletes an Input.
+   *
+   * @param string $inputId The ID of the Input to delete.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function delete($inputId)
   {
     $curl = curl_init($this->apiURL . "encoding/inputs/$inputId");
@@ -135,6 +166,16 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Initializes an upload to Ingest.
+   *
+   * @param string $networkId   The ID of the Network the file will be uploaded to.
+   * @param string $size        The file size, in bytes.
+   * @param string $contentType The type of content that will be uploaded (check main API documentation for details).
+   * @param string $uploadType  The type of upload that will be performed (check main API documentation for details).
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function initializeUpload($inputId, $size, $contentType, $uploadType)
   {
     $curl = curl_init($this->apiURL . "encoding/inputs/{$inputId}/upload?type={$uploadType}");
@@ -149,6 +190,17 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Retrieves the Ingest upload signature for each individual file part.
+   *
+   * @param string $inputId    The ID of the Input the file is a part of.
+   * @param string $partNumber The number of this particular file part.
+   * @param string $uploadId   The ID of the upload this part is involved in.
+   * @param string $contentMd5 What will be in the ContentMd5 header (check main API documentation for details).
+   * @param string $uploadType The type of upload that will be performed (check main API documentation for details).
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function retrieveSignatureForPart($inputId, $partNumber, $uploadId, $contentMd5, $uploadType)
   {
     $curl = curl_init($this->apiURL . "encoding/inputs/{$inputId}/upload/sign?type={$uploadType}");
@@ -174,6 +226,20 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Upload a part to Ingest.
+   *
+   * @param string $s3URL                   The URL you have been provided with to upload the part (check main API documentation for details).
+   * @param string $filePath                The location of the file part.
+   * @param string $partNumber              The number of the part in the upload.
+   * @param string $uploadId                The ID of the upload the part is involved in.
+   * @param string $authorizationHeader     The header previously provided (check main API documentation for details).
+   * @param string $xAmzDateHeader          The header previously provided (check main API documentation for details).
+   * @param string $xAmzSecurityTokenHeader The header previously provided (check main API documentation for details).
+   * @param string $md5Digest               What the contents of the Content-MD5 header will be (check main API documentation for details).
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function uploadPart($s3URL, $filePath, $partNumber, $uploadId, $authorizationHeader, $xAmzDateHeader, $xAmzSecurityTokenHeader, $md5Digest)
   {
     //we're going straight to S3 in this step
@@ -209,6 +275,14 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Completes an upload.
+   *
+   * @param string $inputId  The ID of the Input being uploaded.
+   * @param string $uploadId The ID of the upload being conducted.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function completeUpload($inputId, $uploadId)
   {
     $curl = curl_init($this->apiURL . "encoding/inputs/{$inputId}/upload/complete");
@@ -224,6 +298,14 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
 
   }
 
+  /**
+   * Completes an upload.
+   *
+   * @param string $inputId  The ID of the Input being uploaded.
+   * @param string $uploadId The ID of the upload being conducted.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function abortUpload($inputId, $uploadId)
   {
     $curl = curl_init($this->apiURL . "encoding/inputs/{$inputId}/upload/abort?type=amazonMP");
