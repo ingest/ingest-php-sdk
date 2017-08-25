@@ -1,4 +1,17 @@
 <?php
+/**
+ * A series of tests to ensure proper functionality of the Ingest API and its SDK.
+ *
+ * The tests follow a consistent structure:
+ * - instantiate the object
+ * - call the method
+ * - check the returned value against the expected value
+ * - if not expected, notify
+ *
+ * Some tests depend on other tests having previously executed successfully, such as deleting a previously created resource.
+ *
+ * Some tests, such as Events, rely on the user providing test data, as it cannot be created.
+ */
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
