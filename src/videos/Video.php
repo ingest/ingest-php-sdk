@@ -1,4 +1,8 @@
 <?php
+/**
+ * Videos are a central resource in Ingest, so there are a number of important functions contained here.
+ */
+
 namespace IngestPHPSDK\Videos;
 
 class Video extends \IngestPHPSDK\AbstractAPIUtilities
