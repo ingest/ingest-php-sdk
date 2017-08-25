@@ -1,4 +1,8 @@
 <?php
+/**
+ * Inputs can be a variety of media, later synthesized through a Profile to be part of a Video resource.
+ */
+
 namespace IngestPHPSDK\Inputs;
 
 class Input extends \IngestPHPSDK\AbstractAPIUtilities
@@ -10,6 +14,13 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
     parent::__construct($version, $accessToken);
   }
 
+  /**
+   * Returns a count of all Inputs your token has access to.
+   *
+   * @param string $filter (Optional) What to filter the results by (check main API documentation for options).
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function count($filter = null)
   {
     if ($filter == null)
@@ -32,6 +43,14 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
     return $this->responseProcessor($response, $curl);
   }
 
+  /**
+   * Returns information about all Inputs your token has access to.
+   *
+   * @param string $filter (Optional) What to filter the results by (check main API documentation for options).
+   * @param string $range  (Optional) The range to display in results, for pagination purposes. Check main API documentation for full details.
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   function getAll($filter = null, $range = null)
   {
     if($filter == null)
