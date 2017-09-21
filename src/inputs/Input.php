@@ -169,7 +169,7 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
   /**
    * Initializes an upload to Ingest.
    *
-   * @param string $networkId   The ID of the Network the file will be uploaded to.
+   * @param string $inputId     The ID of the Input that will receive the upload(s).
    * @param string $size        The file size, in bytes.
    * @param string $contentType The type of content that will be uploaded (check main API documentation for details).
    * @param string $uploadType  The type of upload that will be performed (check main API documentation for details).
@@ -191,35 +191,35 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
   }
 
   /**
-   * Retrieves the Ingest upload signature for each individual file part.
+   * Retrieves the Ingest upload signature for each individual file part (or for the entire file, in the case of a single-part upload).
    *
    * @param string $inputId    The ID of the Input the file is a part of.
-   * @param string $partNumber The number of this particular file part.
-   * @param string $uploadId   The ID of the upload this part is involved in.
-   * @param string $contentMd5 What will be in the ContentMd5 header (check main API documentation for details).
    * @param string $uploadType The type of upload that will be performed (check main API documentation for details).
+   * @param string $partNumber (Optional) The number of this particular file part.
+   * @param string $uploadId   (Optional) The ID of the multi-part upload this part is involved in.
    *
    * @return array The API response, split into status, headers, and content.
    */
-  function retrieveSignatureForPart($inputId, $partNumber, $uploadId, $contentMd5, $uploadType)
+  function retrieveSignatureForPart($inputId, $uploadType, $partNumber = null, $uploadId = null)
   {
     $curl = curl_init($this->apiURL . "encoding/inputs/{$inputId}/upload/sign?type={$uploadType}");
 
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: $authorizationHeader", "Accept: $this->acceptHeader", "Content-Type: $this->expectedResponseContentType"));
     curl_setopt($curl, CURLOPT_HEADER, true);
+
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader", "Content-Type: $this->expectedResponseContentType"));
 
     if($uploadType == "amazonMP")
     {
-      $body = array("partNumber"=>$partNumber, "uploadId"=>$uploadId);
-      curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($body));
+      $body = array("partNumber"=>$partNumber, "uploadId"=>$uploadId, "contentType"=>"application/octet-stream");
+    }
+    else
+    {
+      $body = array("contentType"=>"application/octet-stream");
     }
 
-    if(isset($contentMd5))
-    {
-      $headers[] = "ContentMd5: $contentMd5";
-    }
+    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($body));
 
     $response = curl_exec($curl);
 
@@ -231,22 +231,19 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
    *
    * @param string $s3URL                   The URL you have been provided with to upload the part (check main API documentation for details).
    * @param string $filePath                The location of the file part.
-   * @param string $partNumber              The number of the part in the upload.
-   * @param string $uploadId                The ID of the upload the part is involved in.
    * @param string $authorizationHeader     The header previously provided (check main API documentation for details).
    * @param string $xAmzDateHeader          The header previously provided (check main API documentation for details).
    * @param string $xAmzSecurityTokenHeader The header previously provided (check main API documentation for details).
-   * @param string $md5Digest               What the contents of the Content-MD5 header will be (check main API documentation for details).
    *
    * @return array The API response, split into status, headers, and content.
    */
-  function uploadPart($s3URL, $filePath, $partNumber, $uploadId, $authorizationHeader, $xAmzDateHeader, $xAmzSecurityTokenHeader, $md5Digest)
+  function uploadPart($s3URL, $filePath, $authorizationHeader, $xAmzDateHeader, $xAmzSecurityTokenHeader)
   {
     //we're going straight to S3 in this step
     //so things look a little different
 
-    $curl = curl_init($s3URL . "?partNumber={$partNumber}&uploadId={$uploadId}");
-    curl_setopt($curl, CURLOPT_PUT,1);
+    $curl = curl_init($s3URL);
+    curl_setopt($curl, CURLOPT_PUT, true);
 
     $fileStream = fopen($filePath, "r");
     curl_setopt($curl, CURLOPT_INFILE, $fileStream);
@@ -255,19 +252,13 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
     curl_setopt($curl, CURLOPT_INFILESIZE, $filesize);
 
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_HEADER, true);
 
     $headers = array("Authorization: $authorizationHeader",
-      "Accept: $this->acceptHeader",
-      "Content-Type: $this->expectedResponseContentType",
-      "Content-Length: $filesize",
+      "Content-Type: application/octet-stream",
       "x-amz-date: $xAmzDateHeader",
-      "x-amz-security-token: $xAmzSecurityTokenHeader",
+      "x-amz-security-token: $xAmzSecurityTokenHeader"
     );
-
-    if(isset($md5Digest))
-    {
-      $headers[] = "Content-MD5: $md5Digest";
-    }
 
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
     $response = curl_exec($curl);
@@ -299,10 +290,10 @@ class Input extends \IngestPHPSDK\AbstractAPIUtilities
   }
 
   /**
-   * Completes an upload.
+   * Aborts an upload.
    *
-   * @param string $inputId  The ID of the Input being uploaded.
-   * @param string $uploadId The ID of the upload being conducted.
+   * @param string $inputId  The ID of the Input being aborted.
+   * @param string $uploadId The ID of the upload being aborted.
    *
    * @return array The API response, split into status, headers, and content.
    */
