@@ -379,9 +379,9 @@ $result = $network->unlinkUser($networkId, $userId);
 To create an Input, pass a filename, type, and size to the *create* function:
 
 ```
-$filename = "movie.mp4";
+$filename = "bunnySmall.mp4";
 $type = "video/mp4";
-$size = 54102
+$size = 1057551;
 
 $newInput = $input->create($filename, $type, $size);
 ```
@@ -391,12 +391,15 @@ $newInput = $input->create($filename, $type, $size);
 Once you've created the Input, you can tell the API you'd like to begin uploading parts of it:
 
 ```
-$inputId = "cdac2053-9740-4ce2-89e1-d88997c56463";
-$size = 54102;
-$type = "video/mp4";
+$inputId = "2d01e2c8-fbb6-4b7b-9855-8c75aa59ec18";
+$size = 1057551;
+$contentType = "video/mp4";
+$uploadType = "amazon";
 
-$uploadData = $input->initializeUpload($inputId, $size, $type);
+$uploadData = $input->initializeUpload($inputId, $size, $contentType, $uploadType);
 ```
+
+To begin a multi-part upload, pass `amazonMP` as the _$contentType_ argument.
 
 ### Creating file parts
 
@@ -413,48 +416,53 @@ $input->chunkFile($filePath, $chunkSizeInBytes)
 
 By default, this will separate the file into chunks of the specified size, and write these chunks to the current folder, with `chunk` appended. So *"testvideo.mp4"* would become *"testvideo_chunk1.mp4", "testvideo_chunk2.mp4", "testvideo_chunk3.mp4"...* and so on.
 
-### Retrieving a signature for an Input
+### Retrieving a signature for an Input (Multi-Part)
 
-Once you have the URL to upload parts of your Input to, you'll need a signature for each part. It can be retrieved like so:
+Once you've initialized the upload, you'll need a signature for each part, as well as an upload URL. They can be retrieved like so:
 
 ```
 $inputId = "cdac2053-9740-4ce2-89e1-d88997c56463";
+$uploadType = "amazonMP";
 $partNumber = 1;
 $uploadId = "7db00eb8-f2a2-41dc-a091-4811de5d65fb";
-$contentMd5 = "Q2hlY2sgSW50ZWdyaXR5IQ=="; // Content-MD5 = md5 + base64: http://www.ietf.org/rfc/rfc1864.txt
 
-$signature = retrieveSignatureForPart($inputId, $partNumber, $uploadId, $contentMd5)
+$signature = $input->retrieveSignatureForPart($inputId, $uploadType, $partNumber, $uploadId);
 ```
 
-`$contentMd5` is optional, but a nice way of ensuring your file was not corrupted en route to the destination server.
+### Retrieving a signature for an Input (Single-Part)
+
+Once you've initialized the upload, you'll need a signature for each part, as well as an upload URL. They can be retrieved like so:
+
+```
+$inputId = "2d01e2c8-fbb6-4b7b-9855-8c75aa59ec18";
+$uploadType = "amazon";
+
+$signature = $input->retrieveSignatureForPart($inputId, $uploadType);
+```
 
 ### Uploading an Input part
 
-When you initialize an upload, you should receive in your response a URL pointing to Amazon S3, as well as several values that must be set as headers for Amazon to accept the upload.
+When you sign an upload, you should receive in your response a URL pointing to Amazon S3, as well as several values that must be set as headers for Amazon to accept the upload.
 
 To upload a part, provide:
 * the aforementioned URL and header values
 * the path of the part you will be uploading
-* (if desired) the value to set for the *Content-MD5* header
 
 For more info, visit Amazon's official documentation: http://docs.aws.amazon.com/AmazonS3/latest/API/mpUploadUploadPart.html
 
 ```
-$s3URL = "https://s3.amazon.com/fake";
-$file = "movie1.mp4"
-$partNumber = 1;
-$uploadId = "7db00eb8-f2a2-41dc-a091-4811de5d65fb";
-$authorizationHeader = "whatever";
-$xAmzDateHeader = "the API tells you";
-$xAmzSecurityTokenHeader = "to send";
-$md5Digest = "Q2hlY2sgSW50ZWdyaXR5IQ==";
+$s3URL = "https://s3.amazonaws.com/...";
+$filePath = "filename_chunk1.mp4";
+$authorizationHeader = "AWS ...";
+$xAmzDateHeader = "Thu, 21 Sep 2017 13:27:14 +0000";
+$xAmzSecurityTokenHeader = "Tm93IHRoaXMgaXMgdGhlIHN0b3J5IGFsbCBhYm91dCBob3cKTXkgbGlmZSBnb3QgZmxpcHBlZCwgdHVybmVkIHVwc2lkZSBkb3duCkFuZCBJJ2QgbGlrZSB0byB0YWtlIGEgbWludXRlIGp1c3Qgc2l0IHJpZ2h0IHRoZXJlCkknbGwgdGVsbCB5b3UgaG93IEkgYmVjYW1lIHRoZSBwcmluY2Ugb2YgYSB0b3duIGNhbGxlZCBCZWwgQWlyCgo=";
 
-$uploadResult = uploadPart($s3URL, $file, $partNumber, $uploadId, $authorizationHeader, $xAmzDateHeader, $xAmzSecurityTokenHeader, $md5Digest);
+$uploadResult = $input->uploadPart($s3URL, $filePath, $authorizationHeader, $xAmzDateHeader, $xAmzSecurityTokenHeader);
 ```
 
 ### Completing an upload for an Input
 
-S3 doesn't know how many parts are in your upload, so you need to tell it when you're done. Compared to the upload process, it's pretty simple:
+If you've initialized a multi-part upload, S3 doesn't know when you're done, so you need to tell it. Compared to the upload process so far, this last bit is pretty simple:
 
 ```
 $inputId = "cdac2053-9740-4ce2-89e1-d88997c56463";
@@ -465,7 +473,7 @@ $completionResult = $input->completeUpload($inputId, $uploadId);
 
 ### Aborting an upload for an Input
 
-Once an upload has started, it must be explicitly either completed or aborted. Otherwise the parts will just float around aimlessly on the server, taking up space and costing money.
+Once a multi-part upload has started, it must be explicitly either completed or aborted. Otherwise the parts will just float around aimlessly on the server, taking up space and costing money.
 
 ```
 $inputId = "cdac2053-9740-4ce2-89e1-d88997c56463";
