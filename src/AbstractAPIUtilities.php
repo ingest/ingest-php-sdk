@@ -9,8 +9,15 @@ abstract class AbstractAPIUtilities
     $this->apiURL = "https://api.ingest.info/";
     $this->acceptHeader = $version;
     $this->accessToken = $accessToken;
+    $this->expectedResponseContentType = "application/json";
   }
 
+  /**
+   * Creates chunks of arbitrary size from an input file, for use in multi-part uploads.
+   *
+   * @param string $filePath  Where the file to chunk is located.
+   * @param int    $chunkSize (Optional) The desired chunk size in bytes.
+   */
   function chunkFile($filePath, $chunkSize = 5000000)
   {
     //figure out how many chunks are needed
@@ -41,6 +48,14 @@ abstract class AbstractAPIUtilities
 
   }
 
+  /**
+   * Converts raw cURL response string into structured array.
+   *
+   * @param string $response The raw cURL response string.
+   * @param string $curl     The cURL handle (so it's closed here, not left up to the developer to remember).
+   *
+   * @return array The API response, split into status, headers, and content.
+   */
   //takes in response string and curl handle
   //returns formatted array
   function responseProcessor($response, $curl)
