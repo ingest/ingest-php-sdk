@@ -1,3 +1,5 @@
+# THIS REPO HAS BEEN DEPRECATED. PLEASE VISIT https://github.com/ingest/ingest-php-sdk FOR THE MOST UP TO DATE COPY.
+
 # PHP SDK For Ingest
 
 Welcome to the PHP SDK for Ingest! This library has been made available to you so you can access the Ingest API simply via PHP code.
