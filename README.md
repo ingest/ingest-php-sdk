@@ -606,7 +606,7 @@ $user->update('ea2ed255-310c-4426-9881-c4fe8fab4ae1', array("name"=>"New N. Ame"
 
 ### Transferring User Authorship
 
-To transfer authorship of a User's Videos and Playlists to another User, provide the ID of the User being transferred from, and the ID of the User being transferred to:
+To transfer authorship of a User's Videos to another User, provide the ID of the User being transferred from, and the ID of the User being transferred to:
 
 ```
 $user->transferUserAuthorship('ea2ed255-310c-4426-9881-c4fe8fab4ae1', '837052dc-e65d-4b1e-84ac-c7befe9bd8f6');
