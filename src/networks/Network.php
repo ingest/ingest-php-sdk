@@ -8,10 +8,10 @@ namespace IngestPHPSDK\Networks;
 class Network extends \IngestPHPSDK\AbstractAPIUtilities
 {
 
-  function __construct($version, $accessToken)
+  function __construct($version, $accessToken, $sendRequestsToStaging = false)
   {
     //set high-level vars
-    parent::__construct($version, $accessToken);
+    parent::__construct($version, $accessToken, $sendRequestsToStaging);
   }
 
   /**

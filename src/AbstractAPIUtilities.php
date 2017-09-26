@@ -3,13 +3,21 @@ namespace IngestPHPSDK;
 
 abstract class AbstractAPIUtilities
 {
-  function __construct($version, $accessToken)
+  function __construct($version, $accessToken, $sendRequestsToStaging = false)
   {
     //set some defaults
-    $this->apiURL = "https://api.ingest.info/";
     $this->acceptHeader = $version;
     $this->accessToken = $accessToken;
     $this->expectedResponseContentType = "application/json";
+
+    if($sendRequestsToStaging == false)
+    {
+      $this->apiURL = "https://api.ingest.io/";
+    }
+    else
+    {
+      $this->apiURL = "https://api.ingest.info/";
+    }
   }
 
   /**

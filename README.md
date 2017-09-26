@@ -22,7 +22,31 @@ $video = new Video($version, $accessToken);
 $allVideos = $video->getAll();
 ```
 
-To instantiate a Video object, you must pass the API version you wish to use and a valid access token. This code would then return a list of all videos available to you, via the Ingest API. The response would be an associative array, with three elements:
+Put simply, to instantiate an object, you must pass the API version you wish to use, and a valid access token. These will then be associated with all requests made by this object.
+
+There is no functionality for updating either, since no state needs to be preserved in the object between requests. Simply re-initialize the object with new values for version or access token.
+
+If you wish to make requests against the staging API, a third argument is required:
+
+```
+<?php
+
+require dirname(__DIR__) . '/vendor/autoload.php';
+
+use \IngestPHPSDK\Videos\Video;
+
+$version = "application/vnd.ingest.v1+json";
+
+$accessToken = "your.access_token.here";
+
+$sendRequestsToStaging = true;
+
+$video = new Video($version, $accessToken, $sendRequestsToStaging);
+
+$allVideos = $video->getAll();
+```
+
+This code would then return a list of all videos available to you, via the Ingest API. The response would be an associative array, with three elements:
 
 * status
 * headers
