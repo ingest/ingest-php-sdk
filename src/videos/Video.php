@@ -175,25 +175,6 @@ class Video extends \IngestPHPSDK\AbstractAPIUtilities
   }
 
   /**
-   * Returns playlists for a specific Video.
-   *
-   * @param string $videoId The ID of the Video in question.
-   *
-   * @return array The API response, split into status, headers, and content.
-   */
-  function getPlaylists($videoId)
-  {
-    $curl = curl_init($this->apiURL . "videos/{$videoId}/playlists");
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer $this->accessToken", "Accept: $this->acceptHeader"));
-    curl_setopt($curl, CURLOPT_HEADER, true);
-
-    $response = curl_exec($curl);
-
-    return $this->responseProcessor($response, $curl);
-  }
-
-  /**
    * Adds thumbnails to a Video retrieved from an external source, as opposed to uploading them from your computer.
    *
    * @param string $videoId        The ID of the Video in question.
