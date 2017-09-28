@@ -2,6 +2,16 @@
 
 Welcome to the PHP SDK for Ingest! This library has been made available to you so you can access the Ingest API simply via PHP code.
 
+## Installation
+
+Importing our SDK into your PHP project is super easy with Composer. Just run the following command:
+
+```
+composer require ingest/php-sdk
+```
+
+and you're done!
+
 ## Instantiating an Object
 
 The files are laid out similarly to the Ingest API itself. To create a Video object *(or an Input, or a Profile, or any other object)* for your use:
