@@ -4,7 +4,7 @@ Welcome to the PHP SDK for Ingest! This library has been made available to you s
 
 ## Installation
 
-Importing our SDK into your PHP project is super easy with Composer. Just run the following command:
+Importing our SDK into your PHP project is super easy with Composer (https://getcomposer.org). Just run the following command:
 
 ```
 composer require ingest/php-sdk
