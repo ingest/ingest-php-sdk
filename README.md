@@ -21,7 +21,7 @@ The files are laid out similarly to the Ingest API itself. To create a Video obj
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-use \IngestPHPSDK\Videos\Video;
+use \IngestPHPSDK\videos\Video;
 
 $version = "application/vnd.ingest.v1+json";
 
